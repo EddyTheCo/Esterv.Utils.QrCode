@@ -28,18 +28,10 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
+#include <climits>
+#include <sstream>
 
 namespace qrcodegen {
-
-	/*---- utils functions ----*/
-
-	/*
-	 * @param the qr code object, the border, and the fill color.
-	 * @return the svg string of the qr.
-	 *
-	 */
-	std::string toSvgString(const QrCode &qr, int border, std::string fill);
 
 	/*
 	 * A segment of character/binary/control data in a QR Code symbol.
@@ -555,5 +547,14 @@ namespace qrcodegen {
 		public: void appendBits(std::uint32_t val, int len);
 
 	};
+	/*---- utils functions ----*/
+
+	/*
+	 * @param the qr code object, the border, and the fill color.
+	 * @return the svg string of the qr.
+	 *
+	 */
+    std::string toSvgString(const QrCode &qr, std::string fill);
+
 
 }
