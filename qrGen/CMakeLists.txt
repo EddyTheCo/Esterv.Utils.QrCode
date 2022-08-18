@@ -32,7 +32,7 @@ install(DIRECTORY include/ DESTINATION include/)
 
 install(EXPORT qrGenTargets
 	FILE qrGenTargets.cmake
-	NAMESPACE qrCode::
+	NAMESPACE qr::
 	DESTINATION lib/cmake/qrGen
 	)
 include(CMakePackageConfigHelpers)
