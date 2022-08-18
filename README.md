@@ -5,13 +5,15 @@ This repository is intended to provide a library for working with QR codes from 
 ## Adding the libraries to your CMake project will be as easy as
 
 ```CMake
-FetchContent_Declare(
-		qrCode
-		GIT_REPOSITORY git@github.com:EddyTheCo/qrCode
-		)
+include(FetchContent)
+	FetchContent_Declare(
+			qrCode
+			GIT_REPOSITORY git@github.com:EddyTheCo/qrCode
+			GIT_TAG main
+			)
 FetchContent_MakeAvailable(qrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::qrGen)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrGen)
 ```
 
 
