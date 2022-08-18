@@ -17,7 +17,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-add_library(qrGen src/qrcodegen.cpp include/qrcodegen.hpp)
+add_library(qrGen src/qrcodegen.cpp src/utils.cpp include/qrcodegen.hpp)
 
 
 target_compile_features(qrGen PUBLIC cxx_std_11)
