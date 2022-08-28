@@ -245,6 +245,7 @@ int QrCode::getFormatBits(Ecc ecl) {
 
 
 QrCode QrCode::encodeText(const char *text, Ecc ecl) {
+
 	vector<QrSegment> segs = QrSegment::makeSegments(text);
 	return encodeSegments(segs, ecl);
 }
