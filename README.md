@@ -9,7 +9,7 @@ The GUI part will be based on Qt libraries and QML;
 include(FetchContent)
 	FetchContent_Declare(
 			qrCode
-			GIT_REPOSITORY git@github.com:EddyTheCo/qrCode
+			GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
 			GIT_TAG main
 			)
 FetchContent_MakeAvailable(qrCode)
