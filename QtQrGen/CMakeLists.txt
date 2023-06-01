@@ -4,6 +4,7 @@ find_package(Qt6 COMPONENTS Core Gui Qml Quick Svg)
 if (Qt6_FOUND)
 	qt_add_library(QtQrGen Qrimageprovider.cpp include/Qrimageprovider.hpp)
 
+	add_library(qrCode::QtQrGen ALIAS QtQrGen)
 	target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 

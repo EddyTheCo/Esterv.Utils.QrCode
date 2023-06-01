@@ -2,7 +2,7 @@
 project(QrGeneration  LANGUAGES CXX)
 
 add_library(QrGen src/qrcodegen.cpp src/utils.cpp include/qrcodegen.hpp)
-
+add_library(qrCode::QrGen ALIAS QrGen)
 set_target_properties(QrGen PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_features(QrGen PUBLIC cxx_std_11)
