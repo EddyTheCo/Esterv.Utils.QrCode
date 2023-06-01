@@ -5,7 +5,7 @@ if (Qt6_FOUND)
 	qt_add_library(QtQrGen Qrimageprovider.cpp include/Qrimageprovider.hpp)
 
 	target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>")
+		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 
 
 	target_link_libraries(QtQrGen PUBLIC
@@ -21,13 +21,13 @@ if (Qt6_FOUND)
 		)
 
 	install(TARGETS QtQrGen
-		EXPORT ${PROJECT_NAME}-config
+		EXPORT qrCode-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT QtQr
 		EXCLUDE_FROM_ALL
 		)
 	install(DIRECTORY include/
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qrCode
 		COMPONENT QtQr
 		EXCLUDE_FROM_ALL
 		)
