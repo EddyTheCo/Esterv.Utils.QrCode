@@ -1,0 +1,4 @@
+.git/
+doc/html/
+doc/*.tag
+*.swp

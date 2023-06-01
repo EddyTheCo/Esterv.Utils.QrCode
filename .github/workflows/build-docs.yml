@@ -1,0 +1,13 @@
+name: build-docs
+run-name: ${{ github.actor }} ${{ github.event_name }} to ${{ github.base_ref }} 
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+jobs:
+  build_doxygen:
+    uses: EddyTheCo/Common/.github/workflows/build-docs.yml@main
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.base_ref, 'main')) }}
+    permissions:
+      pages: write
+      id-token: write
