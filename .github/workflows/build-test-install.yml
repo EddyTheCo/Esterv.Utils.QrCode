@@ -1,0 +1,23 @@
+name: push-build-release
+run-name: ${{ github.actor }} ${{ github.event_name }} to ${{ github.base_ref }} 
+on: 
+
+  push:
+    tags:
+      - 'v*'
+  pull_request:
+    types: [opened,reopened]
+    branches: [develop]
+jobs:
+  build_test_package:
+    strategy:
+      matrix:
+        os: [ubuntu-latest,macos-latest,windows-latest]
+        sharedLib: [true,false]
+
+    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@main
+    permissions:
+      contents: write
+    with:
+      os: ${{ matrix.os }}
+      sharedLib: ${{ matrix.sharedLib }}
