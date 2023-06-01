@@ -1,5 +1,4 @@
 #include <QPainter>
-#include <QStringRef>
 #include <QSvgRenderer>
 #include "qrcodegen.hpp"
 #include "Qrimageprovider.hpp"
