@@ -1,6 +1,6 @@
 project(QrGeneration  LANGUAGES CXX)
 
-find_package(Qt6 COMPONENTS Core Gui Qml Quick Svg)
+find_package(Qt6 COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Svg)
 
 if (Qt6_FOUND)
 	add_library(QtQrGen Qrimageprovider.cpp include/Qrimageprovider.hpp)
@@ -8,6 +8,14 @@ if (Qt6_FOUND)
 	add_library(qrCode::QtQrGen ALIAS QtQrGen)
 	target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
+	if(NOT TARGET Qt6::Svg)
+		FetchContent_Declare(
+			qtsvg
+			GIT_REPOSITORY git://code.qt.io/qt/qtsvg.git
+			GIT_TAG 6.5.0
+			)
+		FetchContent_MakeAvailable(qtsvg)
+	endif()
 
 
 	target_link_libraries(QtQrGen PUBLIC
