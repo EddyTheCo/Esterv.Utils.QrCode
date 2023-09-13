@@ -1,36 +1,47 @@
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Multimedia)
 
-qt_add_library(QtQrDec Qrimagedecoder.cpp include/Qrimagedecoder.hpp)
+if (Qt6_FOUND AND TARGET QrDec)
+    qt_standard_project_setup()
 
+    if(TARGET Qt6::Multimedia)
+        list(APPEND qml_files  "qml/QrQmlCamera.qml")
+    endif()
+
+    qt6_add_qml_module(QtQrDec
+        URI  QtQrDec
+        VERSION 1.0
+        SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
+        QML_FILES ${qml_files}
+
+        RESOURCE_PREFIX
+        "/esterVtech.com/imports"
+        OUTPUT_TARGETS out_targets_var
+        OUTPUT_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}/QtQrDec
+        IMPORT_PATH ${QML_IMPORT_PATH}
+    )
 target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-	"$<INSTALL_INTERFACE:include>")
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 
-target_link_libraries(QtQrDec PUBLIC
-	Qt6::Core
-	Qt6::Qml
-	)
-target_link_libraries(QtQrDec PRIVATE
-	QrDec
-	Qt6::Gui
-	Qt6::Quick
-	)
+target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick)
+target_link_libraries(QtQrDec PRIVATE QrDec)
 
-install(TARGETS QtQrDec 
-	EXPORT ${PROJECT_NAME}-config 
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	COMPONENT QtQr
-install(DIRECTORY include/ 
-	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-	COMPONENT QtQr
-	)
+install(TARGETS QtQrDec  ${out_targets_var}
+    EXPORT qrCodeTargets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT QtQr
+)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qrCode
+    COMPONENT QtQr
+)
 
+if(EMSCRIPTEN)
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-	include(CTest)
-	if(BUILD_TESTING)
-		add_subdirectory(tests)
-	endif(BUILD_TESTING)
-endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+endif()
 
-
+endif(Qt6_FOUND AND TARGET QrDec)
+list(APPEND QML_IMPORT_PATH  ${CMAKE_CURRENT_BINARY_DIR}/)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
