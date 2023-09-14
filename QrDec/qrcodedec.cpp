@@ -8,8 +8,10 @@ namespace qrcodedec {
 	{
         Mat greyImg = Mat(rows,cols, CV_8UC1, img);
 
-        QRCodeDetector decoder = QRCodeDetector();
-        return decoder.detectAndDecode(greyImg);
+        QRCodeDetector* decoder = new QRCodeDetector();
+        auto str=decoder->detectAndDecode(greyImg);
+        delete decoder;
+        return str;
 	}
 
 
