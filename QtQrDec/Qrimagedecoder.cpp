@@ -2,7 +2,7 @@
 #include "Qrimagedecoder.hpp"
 #include <QDebug>
 #include<QImage>
-
+#include <QQuickImageProvider>
 using namespace qrcodedec;
 
 
@@ -15,7 +15,6 @@ QString fooPrint(void)
 }
 
 #ifdef USE_EMSCRIPTEN
-#include <QQuickImageProvider>
 #include <QRandomGenerator>
 #include <emscripten.h>
 #include <emscripten/bind.h>
