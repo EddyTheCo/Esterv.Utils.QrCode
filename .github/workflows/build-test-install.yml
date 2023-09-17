@@ -20,7 +20,8 @@ jobs:
     with:
       os: ${{ matrix.os }}
       sharedLib: ${{ matrix.sharedLib }}
-      qtVersion: '6.6.0' 
+      qtVersion: '6.6.0'
+      qtModules: 'qtshadertools qtmultimedia'  
       useOpenCV: true  
   release:
     if: startsWith(github.ref, 'refs/tags/v')
