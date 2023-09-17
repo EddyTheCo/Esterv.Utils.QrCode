@@ -1,8 +1,5 @@
+add_library(QrGen src/qrcodegen.cpp src/utils.cpp)
 
-project(QrGeneration  LANGUAGES CXX)
-
-add_library(QrGen src/qrcodegen.cpp src/utils.cpp include/qrcodegen.hpp)
-add_library(qrCode::QrGen ALIAS QrGen)
 set_target_properties(QrGen PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_features(QrGen PUBLIC cxx_std_11)
@@ -11,7 +8,7 @@ target_include_directories(QrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE
 	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 
 install(TARGETS QrGen 
-	EXPORT qrCode-config 
+        EXPORT qrCodeTargets
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	COMPONENT Qr
 	)
