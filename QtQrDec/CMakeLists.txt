@@ -48,6 +48,9 @@ if (Qt6_FOUND AND TARGET QrDec)
 	target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick)
 	target_link_libraries(QtQrDec PRIVATE QrDec MyDesigns)
 
+	if(TARGET Qt6::Multimedia)
+		target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
+	endif(TARGET Qt6::Multimedia)
 	install(TARGETS QtQrDec  ${out_targets_var}
 		EXPORT qrCodeTargets
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
