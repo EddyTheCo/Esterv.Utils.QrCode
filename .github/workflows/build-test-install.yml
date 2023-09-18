@@ -12,14 +12,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest,macos-latest,windows-latest]
-        sharedLib: true
 
     uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@main
     permissions:
       contents: write
     with:
       os: ${{ matrix.os }}
-      sharedLib: ${{ matrix.sharedLib }}
+      sharedLib: true
       qtVersion: '6.6.0'
       qtModules: 'qtshadertools qtmultimedia'  
   release:
