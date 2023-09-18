@@ -22,5 +22,5 @@ target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> QrGen QtQrGen QrDec Qt
 For more information check
 
 
-- [QtQrGen](QtQrGen)
-- [QtQrDec](QtQrDec)
+- [QtQrGen](QtQrGen/README.md)
+- [QtQrDec](QtQrDec/README.md)
