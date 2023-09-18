@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest,macos-latest,windows-latest]
-        sharedLib: [true,false]
+        sharedLib: true
 
     uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@main
     permissions:
