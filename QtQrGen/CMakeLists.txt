@@ -47,7 +47,7 @@ target_link_libraries(QtQrGen PRIVATE
     MyDesigns
 )
 
-install(TARGETS QtQrGen
+install(TARGETS QtQrGen ${out_targets_var}
     EXPORT qrCodeTargets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT QtQr
@@ -61,3 +61,6 @@ if(BUILD_DOCS)
     get_target_property(build_docs cmake_build_docs SOURCES)
     include(${build_docs})
 endif()
+list(APPEND QML_IMPORT_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR})
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)

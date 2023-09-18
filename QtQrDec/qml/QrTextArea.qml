@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
 import MyDesigns
-
+import QtQrDec
 Popup
 {
     id:popup_
