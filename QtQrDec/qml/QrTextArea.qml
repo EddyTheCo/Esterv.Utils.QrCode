@@ -8,9 +8,14 @@ Popup
     id:popup_
     property string description;
     property string placeholder;
-    signal clicked();
+    signal clicked(string data);
 
     onClosed: qrscanner.stop();
+    onOpened:{
+        qrscanner.stop();
+        recaddress.textarea.text="";
+    }
+
     background: Rectangle
     {
         id:bck
@@ -59,7 +64,7 @@ Popup
             onClicked:
             {
                 popup_.close();
-                popup_.clicked();
+                popup_.clicked(recaddress.textarea.text);
             }
             text:qsTr("Ok")
         }
