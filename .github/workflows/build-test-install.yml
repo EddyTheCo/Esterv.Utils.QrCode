@@ -19,7 +19,7 @@ jobs:
     with:
       os: ${{ matrix.os }}
       sharedLib: true
-      qtVersion: '6.5.0'
+      qtVersion: '6.6.0'
       qtModules: 'qtshadertools qtmultimedia'  
   release:
     if: startsWith(github.ref, 'refs/tags/v')
