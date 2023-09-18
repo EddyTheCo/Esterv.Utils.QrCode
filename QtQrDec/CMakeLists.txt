@@ -12,16 +12,10 @@ if (Qt6_FOUND)
 		FetchContent_MakeAvailable(qtmultimedia)
 	endif()
 endif(Qt6_FOUND)
-FetchContent_Declare(
-	MyDesigns
-	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-	GIT_TAG v0.2.3
-	FIND_PACKAGE_ARGS 0.2 CONFIG
-	)
-FetchContent_MakeAvailable(MyDesigns)
+
 
 if (Qt6_FOUND AND TARGET QrDec)
-
+    list(APPEND qml_files  "qml/QrTextArea.qml")
 	if(TARGET Qt6::Multimedia)
 		list(APPEND qml_files  "qml/QrQmlCamera.qml")
 	else()

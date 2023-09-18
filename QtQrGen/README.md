@@ -2,7 +2,7 @@
 
 This code produce a library with a custom ImageProvider of Qt. The image provider print a QRCODE from a string.
 You can play with the resulting ImageProvider on [this page](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_gen).
- An example on how to add the ImageProvider to your project can be found on [this repository](https://github.com/EddyTheCo/qmlonline) (Only the parts enclosed in the USE_QtQrGen macros). 
+ An example on how to add the ImageProvider to your project can be found on [this repository](https://github.com/EddyTheCo/qmlonline) (Only the parts enclosed in the USE_QtQr macros). 
 
 In general CMake produce the target 'QtQrGen' so one can link to this library like
 ```

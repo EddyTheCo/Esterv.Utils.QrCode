@@ -59,6 +59,8 @@ Item
             timer.start();
             startcamera.visible=false;
         }
+        width:100
+        height:width*0.5
     }
 }
 
