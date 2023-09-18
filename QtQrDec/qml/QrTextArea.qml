@@ -21,7 +21,7 @@ Popup
     }
     ColumnLayout
     {
-        anchors.fill: popup_
+        anchors.fill: parent
         MyTextArea
         {
             id:recaddress
@@ -33,6 +33,7 @@ Popup
             Layout.fillHeight: true
             Layout.maximumWidth:400
             Layout.maximumHeight: 200
+            Layout.minimumHeight: 100
             focus:true
         }
         QrQmlCamera
@@ -42,6 +43,8 @@ Popup
             Layout.margins:  5
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.minimumWidth:100
+            Layout.minimumHeight: 200
             onGotdata: (data)=> {
                            qrscanner.stop();
                            recaddress.textarea.text=data;
@@ -52,10 +55,6 @@ Popup
             id:send
             Layout.alignment: Qt.AlignRight
             Layout.margins:  15
-            Layout.fillHeight: true
-            Layout.maximumHeight:  50
-            Layout.fillWidth: true
-            Layout.maximumWidth: 2*height
             enabled: recaddress.textarea.text!==""
             onClicked:
             {
