@@ -13,7 +13,7 @@ if (Qt6_FOUND)
             URI  QtQrGen
             VERSION 1.0
             SOURCES Qrimageprovider.cpp include/Qrimageprovider.hpp
-            QML_FILES qml/AddressQr.qml qml/PayQrPop.qml
+            QML_FILES qml/AddressQr.qml qml/PayQrPop.qml qml/QrLabel.qml
             RESOURCE_PREFIX
             "/esterVtech.com/imports"
             OUTPUT_TARGETS out_targets_var
