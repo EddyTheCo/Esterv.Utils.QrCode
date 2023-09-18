@@ -47,16 +47,18 @@ EM_JS(void, call_start, (), {
                          video.srcObject = stream;
                          window.localStream = stream;
                          getimage=setInterval(function() {
+                                 //You need to define qtQR module when loading the module of the qt application.
                                  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
                                  let imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
                                  var data=imageData.data.buffer;
                                  var uint8Arr = new Uint8Array(data);
                                  const numBytes = uint8Arr.length * uint8Arr.BYTES_PER_ELEMENT;
-                                 const dataPtr = qtClient.module()._malloc(numBytes);
-                                 const dataOnHeap = new Uint8Array(qtClient.module().HEAPU8.buffer, dataPtr, numBytes);
+                                 const dataPtr = qtQR.module()._malloc(numBytes);
+                                 const dataOnHeap = new Uint8Array(qtQR.module().HEAPU8.buffer, dataPtr, numBytes);
                                  dataOnHeap.set(uint8Arr);
-                                 qtClient.module().QRImageDecoder.getdecoder().reload(dataOnHeap.byteOffset,video.width,video.height);
-                                 qtClient.module()._free(dataPtr);
+
+                                 qtQR.module().QRImageDecoder.getdecoder().reload(dataOnHeap.byteOffset,video.width,video.height);
+                                 qtQR.module()._free(dataPtr);
                              }, 100);
 
                      }).catch(alert);
@@ -70,8 +72,14 @@ EM_JS(void, call_start, (), {
 });
 
 EM_JS(void, call_stop, (), {
-    clearInterval(getimage);
-    localStream.getVideoTracks()[0].stop();
+    try {
+        getimage;
+        clearInterval(getimage);
+        localStream.getVideoTracks()[0].stop();
+    }catch(e) {
+        e; // => ReferenceError
+        console.log('getimage is not defined');
+    }
 });
 
 void QRImageDecoder::start()const
