@@ -27,33 +27,45 @@ EMSCRIPTEN_BINDINGS(qrdecoder) {
 }
 
 EM_JS(void, call_start, (), {
-    var elemDiv = document.createElement('div');
-    elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
-    elemDiv.innerHTML += '<video id="qrvideo" width="500px" height="300px"></video><canvas id="qrcanvas" width="500px" height="300px" ></canvas></div>';
-    document.body.appendChild(elemDiv);
 
-    let video = document.querySelector("#qrvideo");
-    let canvas = document.querySelector("#qrcanvas");
-    stream = navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((stream) => {
-                                                                                 video.srcObject = stream;
-                                                                                 window.localStream = stream;
-                                                                                 video.addEventListener("loadedmetadata", () => {
-                                                                                         video.play();
-                                                                                     });
-                                                                                 getimage=setInterval(function() {
-                                                                                         canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                                                                                         let imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-                                                                                         var data=imageData.data.buffer;
-                                                                                         var uint8Arr = new Uint8Array(data);
-                                                                                         const numBytes = uint8Arr.length * uint8Arr.BYTES_PER_ELEMENT;
-                                                                                         const dataPtr = qtClient.module()._malloc(numBytes);
-                                                                                         const dataOnHeap = new Uint8Array(qtClient.module().HEAPU8.buffer, dataPtr, numBytes);
-                                                                                         dataOnHeap.set(uint8Arr);
-                                                                                         qtClient.module().QRImageDecoder.getdecoder().reload(dataOnHeap.byteOffset,video.width,video.height);
-                                                                                         qtClient.module()._free(dataPtr);
-                                                                                     }, 100);
+    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        stream = navigator.mediaDevices.getUserMedia({  video: { facingMode: 'environment' }, audio: false }).then((stream) => {
+                         let settings = stream.getVideoTracks()[0].getSettings();
+                         let width = settings.width;
+                         let height = settings.height;
 
-                                                                             }).catch(alert);
+                         if(document.querySelector("#qrvideo")=== null)
+                         {
+                             var elemDiv = document.createElement('div');
+                             elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
+                             elemDiv.innerHTML += '<video controls autoplay id="qrvideo" width="'+width+'px" height="'+height+'px"></video><canvas id="qrcanvas" width="'+width+'px" height="'+height+'px" ></canvas></div>';
+                             document.body.appendChild(elemDiv);
+                         }
+                         let video = document.querySelector("#qrvideo");
+                         let canvas = document.querySelector("#qrcanvas");
+
+                         video.srcObject = stream;
+                         window.localStream = stream;
+                         getimage=setInterval(function() {
+                                 canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                                 let imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+                                 var data=imageData.data.buffer;
+                                 var uint8Arr = new Uint8Array(data);
+                                 const numBytes = uint8Arr.length * uint8Arr.BYTES_PER_ELEMENT;
+                                 const dataPtr = qtClient.module()._malloc(numBytes);
+                                 const dataOnHeap = new Uint8Array(qtClient.module().HEAPU8.buffer, dataPtr, numBytes);
+                                 dataOnHeap.set(uint8Arr);
+                                 qtClient.module().QRImageDecoder.getdecoder().reload(dataOnHeap.byteOffset,video.width,video.height);
+                                 qtClient.module()._free(dataPtr);
+                             }, 100);
+
+                     }).catch(alert);
+
+
+    }
+
+
+
 
 });
 
