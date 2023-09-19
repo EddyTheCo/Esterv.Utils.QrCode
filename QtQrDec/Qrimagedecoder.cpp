@@ -104,13 +104,9 @@ void QRImageDecoder::set_source(const QString & path )
 }
 void QRImageDecoder::decodePicture(QImage picture)
 {
-    qDebug()<<"decoding picture";
     picture.convertTo(QImage::Format_Grayscale8,Qt::MonoOnly);
-    WasmImageProvider::img=picture;
-    setid();
     auto str = decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
     auto qstr=QString::fromStdString(str);
-    qDebug()<<"str:"<<qstr;
     if(qstr!="")
     {
         text=qstr;
