@@ -7,7 +7,6 @@ namespace qrcodedec {
     string decode_grey(unsigned char* img,int rows ,int cols)
 	{
         Mat greyImg = Mat(rows,cols, CV_8UC1, img);
-
         QRCodeDetector* decoder = new QRCodeDetector();
         auto str=decoder->detectAndDecode(greyImg);
         delete decoder;
