@@ -6,13 +6,6 @@
 using namespace qrcodedec;
 
 
-namespace fooQtQrDec
-{
-QString fooPrint(void)
-{
-    return "fooPrint";
-}
-}
 
 #ifdef USE_EMSCRIPTEN
 #include <QRandomGenerator>
