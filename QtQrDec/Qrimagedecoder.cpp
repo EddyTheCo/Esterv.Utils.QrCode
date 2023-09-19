@@ -5,7 +5,13 @@
 #include <QQuickImageProvider>
 using namespace qrcodedec;
 
-
+namespace fooQtQrDec
+{
+QString fooPrint(void)
+{
+    return "https://forum.qt.io/post/762513";
+}
+}
 
 #ifdef USE_EMSCRIPTEN
 #include <QRandomGenerator>
