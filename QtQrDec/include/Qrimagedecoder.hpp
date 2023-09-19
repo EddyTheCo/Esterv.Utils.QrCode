@@ -6,6 +6,12 @@
 #ifdef USE_EMSCRIPTEN
 #include <qquickimageprovider.h>
 #endif
+//foo namespace to force the linker to link the backing library composed only of qml files
+namespace fooQtQrDec
+{
+QString fooPrint(void);
+};
+
 class QRImageDecoder : public QObject
 {
     Q_OBJECT

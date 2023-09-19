@@ -4,6 +4,15 @@
 #include "Qrimageprovider.hpp"
 #include <QDebug>
 
+
+namespace fooQtQrGen
+{
+QString fooPrint(void)
+{
+    return "https://forum.qt.io/post/762513";
+}
+}
+
 using namespace qrcodegen;
 
 QPixmap QRImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
