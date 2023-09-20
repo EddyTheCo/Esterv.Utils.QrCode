@@ -12,6 +12,7 @@ if(NOT OpenCV_FOUND)
 	endif(EMSCRIPTEN)
 	FetchContent_Declare(
 		OpenCV
+		DOWNLOAD_EXTRACT_TIMESTAMP true
 		URL  ${builturl}
 		)
 	FetchContent_GetProperties(OpenCV)
