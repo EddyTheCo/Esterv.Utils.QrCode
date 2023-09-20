@@ -1,5 +1,5 @@
 find_package(OpenCV)
-if(NOT OpenCV_FOUND)
+if(NOT OpenCV_FOUND AND NOT ANDROID)
 	set(builturl "https://github.com/EddyTheCo/install-OpenCV-action/releases/download/v0.0.14/OpenCV-ubuntu-latest-wasm_false.tar")
 	if(WIN32)
 		set(builturl "https://github.com/EddyTheCo/install-OpenCV-action/releases/download/v0.0.14/OpenCV-windows-latest-wasm_false.tar")
