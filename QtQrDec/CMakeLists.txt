@@ -1,7 +1,9 @@
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Multimedia)
 
-if (Qt6_FOUND)
+
+
+if (Qt6_FOUND AND TARGET QrDec)
 	qt_standard_project_setup()
 	if(NOT TARGET Qt6::Multimedia AND NOT EMSCRIPTEN)
 		FetchContent_Declare(
@@ -11,10 +13,6 @@ if (Qt6_FOUND)
 			)
 		FetchContent_MakeAvailable(qtmultimedia)
 	endif()
-endif(Qt6_FOUND)
-
-
-if (Qt6_FOUND AND TARGET QrDec)
     list(APPEND qml_files  "qml/QrTextArea.qml")
 	if(TARGET Qt6::Multimedia)
 		list(APPEND qml_files  "qml/QrQmlCamera.qml")
