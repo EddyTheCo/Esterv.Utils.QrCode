@@ -5,15 +5,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Mult
 
 if (Qt6_FOUND AND TARGET QrDec)
 	qt_standard_project_setup()
-	if(NOT TARGET Qt6::Multimedia AND NOT EMSCRIPTEN)
-		FetchContent_Declare(
-			qtmultimedia
-			GIT_REPOSITORY git://code.qt.io/qt/qtmultimedia.git
-			GIT_TAG 6.5.0
-			)
-		FetchContent_MakeAvailable(qtmultimedia)
-	endif()
-    list(APPEND qml_files  "qml/QrTextArea.qml")
+	list(APPEND qml_files  "qml/QrTextArea.qml")
 	if(TARGET Qt6::Multimedia)
 		list(APPEND qml_files  "qml/QrQmlCamera.qml")
 	else()
