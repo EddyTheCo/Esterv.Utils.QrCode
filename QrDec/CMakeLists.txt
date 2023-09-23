@@ -1,4 +1,4 @@
-find_package(OpenCV)
+find_package(OpenCV COMPONENTS core objdetect )
 if(NOT OpenCV_FOUND )
 	set(builturl "https://github.com/EddyTheCo/install-OpenCV-action/releases/latest/download/OpenCV-ubuntu-latest-wasm_false-android_none.tar")
 	if(WIN32)
@@ -28,9 +28,9 @@ if(NOT OpenCV_FOUND )
 			set(OpenCV_DIR ${opencv_SOURCE_DIR})
 		endif(WIN32)
 		if(ANDROID)
-			set(OpenCV_DIR ${opencv_SOURCE_DIR}/sdk/native/jni)
+                    set(OpenCV_DIR ${opencv_SOURCE_DIR}/sdk/native/jni)
 		endif(ANDROID)
-		find_package(OpenCV)
+                find_package(OpenCV COMPONENTS core objdetect)
 	endif()
 endif()
 
@@ -47,8 +47,7 @@ if(OpenCV_FOUND)
 
 	target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
-
-	install(TARGETS QrDec
+        install(TARGETS QrDec
 		EXPORT qrCodeTargets
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT Qr
