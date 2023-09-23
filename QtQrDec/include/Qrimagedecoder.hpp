@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE void start()const;
     Q_INVOKABLE void stop()const;
 #endif
+    Q_INVOKABLE void requestPermision();
     QString get_text(void)
     {
         return text;
@@ -49,6 +50,7 @@ public:
 signals:
     void text_changed();
     void source_changed();
+    void permissionRequested(bool);
 
 private:
 #ifdef USE_EMSCRIPTEN

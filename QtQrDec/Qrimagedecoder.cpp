@@ -3,6 +3,8 @@
 #include <QDebug>
 #include<QImage>
 #include <QQuickImageProvider>
+#include <QPermissions>
+#include <QGuiApplication>
 using namespace qrcodedec;
 
 namespace fooQtQrDec
@@ -91,9 +93,27 @@ void QRImageDecoder::stop()const
 }
 
 #endif
-
+void QRImageDecoder::requestPermision()
+{
+#if QT_CONFIG(permissions)
+    QCameraPermission cPermission;
+    switch (qApp->checkPermission(cPermission)) {
+    case Qt::PermissionStatus::Undetermined:
+        qApp->requestPermission(cPermission, this,
+                                &QRImageDecoder::requestPermision);
+        return;
+    case Qt::PermissionStatus::Denied:
+        emit permissionRequested(false);
+        return;
+    case Qt::PermissionStatus::Granted:
+        emit permissionRequested(true);
+        return;
+    }
+#endif
+}
 void QRImageDecoder::set_source(const QString & path )
 {
+    qDebug()<<"QRImageDecoder::set_source:"<<path;
     if(path=="") return;
     QImage picture;
     auto myQmlEngine = qmlEngine(this);
@@ -102,17 +122,22 @@ void QRImageDecoder::set_source(const QString & path )
 
     QUrl imageUrl(path);
     auto provider = reinterpret_cast<QQuickImageProvider*>( myQmlEngine->imageProvider(imageUrl.host()));
+    qDebug()<<"QRImageDecoder::provider:"<<provider;
     if (provider->imageType()==QQuickImageProvider::Image){
         picture = provider->requestImage(imageUrl.path().remove(0,1),nullptr,QSize());
+        qDebug()<<"QRImageDecoder::picture:"<<picture;
     }
     if(!picture.isNull())decodePicture(picture);
 
 }
 void QRImageDecoder::decodePicture(QImage picture)
 {
+    qDebug()<<"QRImageDecoder::decodePicture:"<<picture;
     picture.convertTo(QImage::Format_Grayscale8,Qt::MonoOnly);
+
     auto str = decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
     auto qstr=QString::fromStdString(str);
+    qDebug()<<"str:"<<qstr;
     if(qstr!="")
     {
         text=qstr;
