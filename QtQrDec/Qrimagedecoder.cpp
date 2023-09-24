@@ -4,9 +4,11 @@
 #include<QImage>
 #include <QQuickImageProvider>
 #if QT_CONFIG(permissions)
-  #include <QPermission>
+#include <QPermission>
 #endif
 #include <QGuiApplication>
+#include <QRandomGenerator>
+
 using namespace qrcodedec;
 
 namespace fooQtQrDec
@@ -18,7 +20,7 @@ QString fooPrint(void)
 }
 
 #ifdef USE_EMSCRIPTEN
-#include <QRandomGenerator>
+
 #include <emscripten.h>
 #include <emscripten/bind.h>
 QRImageDecoder* QRImageDecoder::m_decoder=nullptr;
@@ -33,38 +35,38 @@ EM_JS(void, call_start, (), {
 
     if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         stream = navigator.mediaDevices.getUserMedia({  video: { facingMode: 'environment' }, audio: false }).then((stream) => {
-                         let settings = stream.getVideoTracks()[0].getSettings();
-                         let width = settings.width;
-                         let height = settings.height;
+                                                                                                            let settings = stream.getVideoTracks()[0].getSettings();
+                                                                                                            let width = settings.width;
+                                                                                                            let height = settings.height;
 
-                         if(document.querySelector("#qrvideo")=== null)
-                         {
-                             var elemDiv = document.createElement('div');
-                             elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
-                             elemDiv.innerHTML += '<video controls autoplay id="qrvideo" width="'+width+'px" height="'+height+'px"></video><canvas id="qrcanvas" width="'+width+'px" height="'+height+'px" ></canvas></div>';
-                             document.body.appendChild(elemDiv);
-                         }
-                         let video = document.querySelector("#qrvideo");
-                         let canvas = document.querySelector("#qrcanvas");
+                                                                                                            if(document.querySelector("#qrvideo")=== null)
+                                                                                                            {
+                                                                                                                var elemDiv = document.createElement('div');
+                                                                                                                elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
+                                                                                                                elemDiv.innerHTML += '<video controls autoplay id="qrvideo" width="'+width+'px" height="'+height+'px"></video><canvas id="qrcanvas" width="'+width+'px" height="'+height+'px" ></canvas></div>';
+                                                                                                                document.body.appendChild(elemDiv);
+                                                                                                            }
+                                                                                                            let video = document.querySelector("#qrvideo");
+                                                                                                            let canvas = document.querySelector("#qrcanvas");
 
-                         video.srcObject = stream;
-                         window.localStream = stream;
-                         getimage=setInterval(function() {
-                                 //You need to define qtQR module when loading the module of the qt application.
-                                 canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                                 let imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-                                 var data=imageData.data.buffer;
-                                 var uint8Arr = new Uint8Array(data);
-                                 const numBytes = uint8Arr.length * uint8Arr.BYTES_PER_ELEMENT;
-                                 const dataPtr = qtQR.module()._malloc(numBytes);
-                                 const dataOnHeap = new Uint8Array(qtQR.module().HEAPU8.buffer, dataPtr, numBytes);
-                                 dataOnHeap.set(uint8Arr);
+                                                                                                            video.srcObject = stream;
+                                                                                                            window.localStream = stream;
+                                                                                                            getimage=setInterval(function() {
+                                                                                                                    //You need to define qtQR module when loading the module of the qt application.
+                                                                                                                    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                                                                                                                    let imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+                                                                                                                    var data=imageData.data.buffer;
+                                                                                                                    var uint8Arr = new Uint8Array(data);
+                                                                                                                    const numBytes = uint8Arr.length * uint8Arr.BYTES_PER_ELEMENT;
+                                                                                                                    const dataPtr = qtQR.module()._malloc(numBytes);
+                                                                                                                    const dataOnHeap = new Uint8Array(qtQR.module().HEAPU8.buffer, dataPtr, numBytes);
+                                                                                                                    dataOnHeap.set(uint8Arr);
 
-                                 qtQR.module().QRImageDecoder.getdecoder().reload(dataOnHeap.byteOffset,video.width,video.height);
-                                 qtQR.module()._free(dataPtr);
-                             }, 100);
+                                                                                                                    qtQR.module().QRImageDecoder.getdecoder().reload(dataOnHeap.byteOffset,video.width,video.height);
+                                                                                                                    qtQR.module()._free(dataPtr);
+                                                                                                                }, 100);
 
-                     }).catch(alert);
+                                                                                                        }).catch(alert);
 
 
     }
@@ -95,48 +97,98 @@ void QRImageDecoder::stop()const
 }
 
 #endif
-void QRImageDecoder::requestPermision()
+void QRImageDecoder::getCamera(void)
+{
+    const QList<QCameraDevice> cameras = QMediaDevices::videoInputs();
+    if(cameras.size())
+    {
+        QCameraDevice best=cameras.front();
+        for (const QCameraDevice &cameraDevice : cameras) {
+
+            if (cameraDevice.position() == QCameraDevice::BackFace)
+            {
+                best=cameraDevice;
+            }
+        }
+        m_camera=new QCamera(best,this);
+        m_camera->setExposureMode(QCamera::ExposurePortrait);
+        m_camera->setFocusMode(QCamera::FocusModeAutoFar);
+        auto bvF=best.videoFormats().at(0);
+        for (const QCameraFormat &format : best.videoFormats())
+        {
+            if(abs(format.resolution().width()*1.0-format.resolution().height())<abs(bvF.resolution().width()*1.0-bvF.resolution().height()))
+            {
+                bvF=format;
+            }
+        }
+        m_camera->setCameraFormat(bvF);
+
+    }
+
+}
+QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_camera(nullptr),captureSession(new QMediaCaptureSession(this)),videoSink(new QVideoSink(this))
+{
+#ifdef USE_EMSCRIPTEN
+    m_decoder=this;
+#endif
+    captureSession->setVideoOutput(videoSink);
+    QObject::connect(videoSink,&QVideoSink::videoFrameChanged,this,[=](const QVideoFrame & Vframe)
+                     {
+        static size_t index=0;
+        if(index>4)
+            {
+                         qDebug()<<"MCAMERA:videoFrameChanged";
+                         auto picture=Vframe.toImage();
+                         qDebug()<<"picture"<<picture;
+
+                         WasmImageProvider::img=picture;
+                         setid();
+                         decodePicture(WasmImageProvider::img);
+                         index=0;
+        }
+                         index++;
+                     });
+};
+void QRImageDecoder::start()
 {
 #if QT_CONFIG(permissions)
     QCameraPermission cPermission;
     switch (qApp->checkPermission(cPermission)) {
     case Qt::PermissionStatus::Undetermined:
         qApp->requestPermission(cPermission, this,
-                                &QRImageDecoder::requestPermision);
+                                &QRImageDecoder::start);
         return;
     case Qt::PermissionStatus::Denied:
-        emit permissionRequested(false);
         return;
     case Qt::PermissionStatus::Granted:
-        emit permissionRequested(true);
+        qDebug()<<"PermissionStatus::Granted";
+        if(!m_camera)
+        {
+            getCamera();
+            if(m_camera)
+            {
+                captureSession->setCamera(m_camera);
+            }
+
+        }
+        if(m_camera)
+        {
+
+            m_camera->start();
+
+        }
+
         return;
     }
 #endif
 }
-void QRImageDecoder::set_source(const QString & path )
-{
-    qDebug()<<"QRImageDecoder::set_source:"<<path;
-    if(path=="") return;
-    QImage picture;
-    auto myQmlEngine = qmlEngine(this);
-    if(myQmlEngine==nullptr)
-        return;
 
-    QUrl imageUrl(path);
-    auto provider = reinterpret_cast<QQuickImageProvider*>( myQmlEngine->imageProvider(imageUrl.host()));
-    qDebug()<<"QRImageDecoder::provider:"<<provider;
-    if (provider->imageType()==QQuickImageProvider::Image){
-        picture = provider->requestImage(imageUrl.path().remove(0,1),nullptr,QSize());
-        qDebug()<<"QRImageDecoder::picture:"<<picture;
-    }
-    if(!picture.isNull())decodePicture(picture);
-
-}
 void QRImageDecoder::decodePicture(QImage picture)
 {
     qDebug()<<"QRImageDecoder::decodePicture:"<<picture;
     picture.convertTo(QImage::Format_Grayscale8,Qt::MonoOnly);
-
+    WasmImageProvider::img=picture;
+    setid();
     auto str = decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
     auto qstr=QString::fromStdString(str);
     qDebug()<<"str:"<<qstr;
@@ -146,7 +198,7 @@ void QRImageDecoder::decodePicture(QImage picture)
         emit text_changed();
     }
 }
-#ifdef USE_EMSCRIPTEN
+
 QImage WasmImageProvider::img=QImage();
 QImage WasmImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
@@ -161,12 +213,7 @@ void QRImageDecoder::reload(int offset,  int width, int height)
 }
 void QRImageDecoder::setid()
 {
-    QByteArray seed;
-    auto buffer=QDataStream(&seed,QIODevice::WriteOnly | QIODevice::Append);
-
-    quint32 value = QRandomGenerator::global()->generate();
-    buffer<<value;
-    source=seed.toHex();
+    source=QString::number(QRandomGenerator::global()->generate());
     emit source_changed();
 }
-#endif
+
