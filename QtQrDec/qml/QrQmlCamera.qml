@@ -56,8 +56,14 @@ Item
                 console.log("device:",camera.cameraDevice);
                 console.log("Formats:",camera.cameraDevice.videoFormats);
                 console.log("Camera.resolution:",camera.cameraFormat.resolution);
+                let min=camera.cameraDevice.videoFormats[0].resolution.width*camera.cameraDevice.videoFormats[0].resolution.height;
                 camera.cameraFormat=camera.cameraDevice.videoFormats[0];
+                console.log("min:",min);
                 camera.cameraDevice.videoFormats.forEach((form) => {
+                                                             if(form.resolution.width*form.resolution.height<min)
+                                                             {
+                                                                 camera.cameraFormat=form;
+                                                             }
 
                 console.log("Format.minFrameRate:",form.minFrameRate);
                 console.log("Format.pixelFormat:",form.pixelFormat);
@@ -65,6 +71,7 @@ Item
                                                          });
 
                 console.log("Camera.resolution:",camera.cameraFormat.resolution);
+                console.log("Camera.pixelFormat:",camera.cameraFormat.pixelFormat);
                 camera.start();
                 timer.start();
                 startcamera.visible=false;
