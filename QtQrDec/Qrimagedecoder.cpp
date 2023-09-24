@@ -3,7 +3,9 @@
 #include <QDebug>
 #include<QImage>
 #include <QQuickImageProvider>
-#include <QPermissions>
+#if QT_CONFIG(permissions)
+  #include <QPermission>
+#endif
 #include <QGuiApplication>
 using namespace qrcodedec;
 

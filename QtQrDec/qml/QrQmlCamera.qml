@@ -24,6 +24,7 @@ Item
         id: camera
         active: false
         cameraDevice: devices.defaultVideoInput
+
         onErrorOccurred: (error,errorString)=> {
                              console.log( devices.videoInputs);
                              console.log(errorString)
@@ -42,18 +43,28 @@ Item
         function onPermissionRequested(boo) {
             if(boo)
             {
-                console.log( devices.videoInputs);
-                console.log(camera.cameraFormat)
-
+                console.log("devices:",devices.videoInputs);
                 devices.videoInputs.forEach((Cdev)
                                             => {
-                                                if(Cdev.position===Cdev.BackFace)
+                                                console.log("dev:",Cdev.position);
+                                                if(Cdev.position===1)
                                                 {
+                                                    console.log("equal",Cdev.position)
                                                     camera.cameraDevice=Cdev;
                                                 }
                                             });
+                console.log("device:",camera.cameraDevice);
+                console.log("Formats:",camera.cameraDevice.videoFormats);
+                console.log("Camera.resolution:",camera.cameraFormat.resolution);
+                camera.cameraFormat=camera.cameraDevice.videoFormats[0];
+                camera.cameraDevice.videoFormats.forEach((form) => {
 
+                console.log("Format.minFrameRate:",form.minFrameRate);
+                console.log("Format.pixelFormat:",form.pixelFormat);
+                console.log("Format.resolution:",form.resolution);
+                                                         });
 
+                console.log("Camera.resolution:",camera.cameraFormat.resolution);
                 camera.start();
                 timer.start();
                 startcamera.visible=false;
@@ -69,7 +80,6 @@ Item
             id: imageCapture
             onErrorOccurred:(requestId, error, message)=> {
                                 console.log("capture error:",message)
-
             }
 
             onImageCaptured: {
@@ -81,12 +91,13 @@ Item
     }
     Timer {
         id: timer
-        interval: 500; running: false; repeat: true
+        interval: 5000; running: false; repeat: true
         onTriggered:
         {
 
             if( imageCapture.readyForCapture )
             {
+                console.log("READY");
                 imageCapture.capture();
             }
         }
