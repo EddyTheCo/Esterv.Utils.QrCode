@@ -194,7 +194,7 @@ void QRImageDecoder::decodePicture(QImage picture)
     if(qstr!="")
     {
         text=qstr;
-        emit text_changed();
+        //emit text_changed();
     }
 }
 
