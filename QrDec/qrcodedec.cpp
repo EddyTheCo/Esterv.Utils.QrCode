@@ -15,9 +15,15 @@ std::string MyQRCodeDetector::decode_grey(unsigned char* img,int rows ,int cols)
         for(int j = 0 ; j < corners.cols ; j++)
         {
             qDebug()<<corners.at<float>(i,j);
-            cv::line(greyImg, cv::Point2i(corners.at<float>(i,j)), cv::Point2i(corners.at<float>(i,j+1)), cv::Scalar(100,200,155), 10);
-        }
 
+        }
+    }
+    if(corners.rows&&corners.cols)
+    {
+        cv::line(greyImg, cv::Point2i(corners.at<float>(0,0),corners.at<float>(0,1)), cv::Point2i(corners.at<float>(0,2),corners.at<float>(0,1)), cv::Scalar(100,200,155), 11);
+        cv::line(greyImg, cv::Point2i(corners.at<float>(0,2),corners.at<float>(0,1)),cv::Point2i(corners.at<float>(0,2),corners.at<float>(0,3)), cv::Scalar(30,100,0), 8);
+        cv::line(greyImg, cv::Point2i(corners.at<float>(0,0),corners.at<float>(0,1)), cv::Point2i(corners.at<float>(0,0),corners.at<float>(0,3)), cv::Scalar(150,4,255), 5);
+        cv::line(greyImg, cv::Point2i(corners.at<float>(0,0),corners.at<float>(0,3)),cv::Point2i(corners.at<float>(0,2),corners.at<float>(0,3)), cv::Scalar(75,75,75), 2);
     }
     return str;
 }
