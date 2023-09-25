@@ -1,4 +1,3 @@
-#include "qrcodedec.hpp"
 #include "Qrimagedecoder.hpp"
 #include <QDebug>
 #include<QImage>
@@ -9,7 +8,6 @@
 #include <QGuiApplication>
 #include <QRandomGenerator>
 
-using namespace qrcodedec;
 
 namespace fooQtQrDec
 {
@@ -111,8 +109,6 @@ void QRImageDecoder::getCamera(void)
             }
         }
         m_camera=new QCamera(best,this);
-        m_camera->setExposureMode(QCamera::ExposurePortrait);
-        m_camera->setFocusMode(QCamera::FocusModeAutoFar);
         auto bvF=best.videoFormats().at(0);
         for (const QCameraFormat &format : best.videoFormats())
         {
@@ -126,7 +122,8 @@ void QRImageDecoder::getCamera(void)
     }
 
 }
-QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_camera(nullptr),captureSession(new QMediaCaptureSession(this)),videoSink(new QVideoSink(this))
+QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_camera(nullptr),captureSession(new QMediaCaptureSession(this)),videoSink(new QVideoSink(this)),
+    detector(new MyQRCodeDetector())
 {
 #ifdef USE_EMSCRIPTEN
     m_decoder=this;
@@ -187,9 +184,11 @@ void QRImageDecoder::decodePicture(QImage picture)
 {
     qDebug()<<"QRImageDecoder::decodePicture:"<<picture;
     picture.convertTo(QImage::Format_Grayscale8,Qt::MonoOnly);
+
+    auto str = detector->decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
     WasmImageProvider::img=picture;
     setid();
-    auto str = decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
+    qDebug()<<"QRImageDecoder::decodePicture:"<<picture;
     auto qstr=QString::fromStdString(str);
     qDebug()<<"str:"<<qstr;
     if(qstr!="")

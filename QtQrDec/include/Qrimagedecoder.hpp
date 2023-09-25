@@ -9,6 +9,8 @@
 #include <QCamera>
 #include <QMediaCaptureSession>
 #include <QVideoSink>
+#include <qrcodedec.hpp>
+
 //foo namespace to force the linker to link the backing library composed only of qml files
 namespace fooQtQrDec
 {
@@ -60,6 +62,7 @@ private:
     QCamera* m_camera;
     QMediaCaptureSession* captureSession;
     QVideoSink* videoSink;
+    MyQRCodeDetector* detector;
 };
 
 

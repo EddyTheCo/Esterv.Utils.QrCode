@@ -1,11 +1,12 @@
 #pragma once
-#include<iostream>
+#include<opencv2/opencv.hpp>
 #include<string>
-#include<vector>
 
-namespace qrcodedec {
+class MyQRCodeDetector : public cv::QRCodeDetector
+{
 
-std::string decode_grey(unsigned char* img, int rows,int cols);
+public:
+    MyQRCodeDetector(){};
+    std::string decode_grey(unsigned char* img, int rows,int cols);
+};
 
-
-}
