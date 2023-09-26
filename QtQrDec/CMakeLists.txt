@@ -38,7 +38,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		COMPONENT QtQr
 		)
 	if(EMSCRIPTEN)
-		target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
+                target_compile_definitions(QtQrDec PUBLIC USE_EMSCRIPTEN)
 	endif(EMSCRIPTEN)
 endif(Qt6_FOUND AND TARGET QrDec)
 list(APPEND QML_IMPORT_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR})

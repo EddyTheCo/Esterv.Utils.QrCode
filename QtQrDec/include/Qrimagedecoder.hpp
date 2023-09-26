@@ -10,7 +10,7 @@
 #include <QCamera>
 #include <QMediaCaptureSession>
 #include <QVideoSink>
-#include<thread>
+#include <thread>
 #endif
 #include <qrcodedec.hpp>
 
