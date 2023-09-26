@@ -200,9 +200,6 @@ void QRImageDecoder::decodePicture(QImage picture)
     {
         mutex.lock();
         text=qstr;
-#ifndef USE_EMSCRIPTEN
-        if(m_camera)m_camera->stop();
-#endif
         emit text_changed();
         mutex.unlock();
     }
