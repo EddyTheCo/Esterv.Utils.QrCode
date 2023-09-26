@@ -37,11 +37,10 @@ endif()
 
 
 if(OpenCV_FOUND)
-    find_package(Qt6 REQUIRED COMPONENTS Core)
         add_library(QrDec qrcodedec.cpp)
 
         target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${OpenCV_INCLUDE_DIRS}>)
-        target_link_libraries(QrDec PUBLIC ${OpenCV_LIBS} Qt6::Core)
+        target_link_libraries(QrDec PUBLIC ${OpenCV_LIBS})
 
         target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                 "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")

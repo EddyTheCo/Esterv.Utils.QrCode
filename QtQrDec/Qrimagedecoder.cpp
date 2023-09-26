@@ -2,11 +2,8 @@
 #include <QDebug>
 #include<QImage>
 #include <QQuickImageProvider>
-#if QT_CONFIG(permissions)
-#include <QPermission>
-#endif
 #include <QGuiApplication>
-#include <QRandomGenerator>
+
 
 
 namespace fooQtQrDec
@@ -29,7 +26,7 @@ EMSCRIPTEN_BINDINGS(qrdecoder) {
         .class_function("getdecoder", &QRImageDecoder::getdecoder, emscripten::allow_raw_pointers());
 }
 
-EM_JS(void, call_start, (), {
+EM_JS(void, js_start, (), {
 
     if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         stream = navigator.mediaDevices.getUserMedia({  video: { facingMode: 'environment' }, audio: false }).then((stream) => {
@@ -74,7 +71,7 @@ EM_JS(void, call_start, (), {
 
 });
 
-EM_JS(void, call_stop, (), {
+EM_JS(void, js_stop, (), {
     try {
         getimage;
         clearInterval(getimage);
@@ -84,17 +81,12 @@ EM_JS(void, call_stop, (), {
         console.log('getimage is not defined');
     }
 });
-
-void QRImageDecoder::start()const
-{
-    call_start();
-}
-void QRImageDecoder::stop()const
-{
-    call_stop();
-}
-
+#else
+#include<thread>
+#if QT_CONFIG(permissions)
+#include <QPermission>
 #endif
+
 void QRImageDecoder::getCamera(void)
 {
     const QList<QCameraDevice> cameras = QMediaDevices::videoInputs();
@@ -122,33 +114,50 @@ void QRImageDecoder::getCamera(void)
     }
 
 }
-QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_camera(nullptr),captureSession(new QMediaCaptureSession(this)),videoSink(new QVideoSink(this)),
-    detector(new MyQRCodeDetector())
+
+#endif
+
+QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),
+#ifndef USE_EMSCRIPTEN
+    m_camera(nullptr),captureSession(new QMediaCaptureSession(this)),videoSink(new QVideoSink(this)),
+#endif
+    m_state(Ready)
 {
 #ifdef USE_EMSCRIPTEN
     m_decoder=this;
-#endif
+#else
+
     captureSession->setVideoOutput(videoSink);
     QObject::connect(videoSink,&QVideoSink::videoFrameChanged,this,[=](const QVideoFrame & Vframe)
                      {
-        static size_t index=0;
-        if(index>4)
-            {
-                         qDebug()<<"MCAMERA:videoFrameChanged";
-                         auto picture=Vframe.toImage();
-                         qDebug()<<"picture"<<picture;
 
-                         WasmImageProvider::img=picture;
-                         setid();
-                         decodePicture(WasmImageProvider::img);
-                         index=0;
-        }
-                         index++;
+                         if(m_camera&&m_camera->isActive()){
+
+                             auto picture=Vframe.toImage();
+                             WasmImageProvider::img=picture;
+                             setid();
+                             if(m_state)
+                             {
+                                 auto var= std::thread(&QRImageDecoder::decodePicture, this,picture);
+                                 var.detach();
+                             }
+                         }
+
                      });
+#endif
+};
+void QRImageDecoder::stop(){
+#ifdef USE_EMSCRIPTEN
+    js_stop();
+#else
+    if(m_camera)m_camera->stop();
+#endif
 };
 void QRImageDecoder::start()
 {
-#if QT_CONFIG(permissions)
+#ifdef USE_EMSCRIPTEN
+    js_start();
+#elif QT_CONFIG(permissions)
     QCameraPermission cPermission;
     switch (qApp->checkPermission(cPermission)) {
     case Qt::PermissionStatus::Undetermined:
@@ -158,44 +167,47 @@ void QRImageDecoder::start()
     case Qt::PermissionStatus::Denied:
         return;
     case Qt::PermissionStatus::Granted:
-        qDebug()<<"PermissionStatus::Granted";
         if(!m_camera)
         {
             getCamera();
             if(m_camera)
             {
                 captureSession->setCamera(m_camera);
+                QObject::connect(m_camera,&QCamera::errorOccurred,[](QCamera::Error error, const QString &errorString)
+                                 {
+                                     qDebug()<<"Camera Error:"<<errorString;
+                                 });
             }
 
         }
         if(m_camera)
         {
-
             m_camera->start();
-
         }
 
         return;
     }
+
 #endif
 }
 
 void QRImageDecoder::decodePicture(QImage picture)
 {
-    qDebug()<<"QRImageDecoder::decodePicture:"<<picture;
-    picture.convertTo(QImage::Format_Grayscale8,Qt::MonoOnly);
+    m_state=Decoding;
+    picture.convertTo(QImage::Format_Grayscale8);
 
-    auto str = detector->decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
-    WasmImageProvider::img=picture;
-    setid();
-    qDebug()<<"QRImageDecoder::decodePicture:"<<picture;
-    auto qstr=QString::fromStdString(str);
-    qDebug()<<"str:"<<qstr;
+    const auto str = detector.decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
+    const auto qstr=QString::fromStdString(str);
     if(qstr!="")
     {
         text=qstr;
-        //emit text_changed();
+#ifndef USE_EMSCRIPTEN
+        if(m_camera)m_camera->stop();
+#endif
+        emit text_changed();
+
     }
+    m_state=Ready;
 }
 
 QImage WasmImageProvider::img=QImage();
@@ -212,7 +224,9 @@ void QRImageDecoder::reload(int offset,  int width, int height)
 }
 void QRImageDecoder::setid()
 {
-    source=QString::number(QRandomGenerator::global()->generate());
+    static quint8 index=0;
+    source=QString::number(index);
     emit source_changed();
+    index++;
 }
 

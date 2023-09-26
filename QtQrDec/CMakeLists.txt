@@ -5,20 +5,13 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Mult
 
 if (Qt6_FOUND AND TARGET QrDec)
 	qt_standard_project_setup()
-	list(APPEND qml_files  "qml/QrTextArea.qml")
-	if(TARGET Qt6::Multimedia)
-		list(APPEND qml_files  "qml/QrQmlCamera.qml")
-	else()
-		if(EMSCRIPTEN)
-			list(APPEND qml_files  "qml/wasm/QrQmlCamera.qml")
-		endif()
-	endif()
-
 	qt6_add_qml_module(QtQrDec
 		URI  QtQrDec
 		VERSION 1.0
 		SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
-		QML_FILES ${qml_files}
+                QML_FILES
+                qml/QrTextArea.qml
+                qml/QrQmlCamera.qml
 		RESOURCE_PREFIX
 		"/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var

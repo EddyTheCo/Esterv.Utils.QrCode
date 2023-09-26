@@ -15,7 +15,6 @@ Item
         target: QRImageDecoder
         function onText_changed(boo) {
             root.gotdata(QRImageDecoder.text)
-
         }
     }
     Image {
@@ -30,7 +29,7 @@ Item
     {
         id:startcamera
         anchors.centerIn: root
-        text:qsTr("ScanQr")
+        text:qsTr("Scan Qr")
         onClicked:
         {
             QRImageDecoder.start();

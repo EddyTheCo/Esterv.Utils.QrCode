@@ -26,43 +26,37 @@ class QRImageDecoder : public QObject
     QML_SINGLETON
 public:
     QRImageDecoder(QObject *parent = nullptr);
-
-#ifdef USE_EMSCRIPTEN
-    Q_INVOKABLE void start()const;
-    Q_INVOKABLE void stop()const;
-#endif
+    enum State {
+        Decoding = 0,
+        Ready
+    };
     Q_INVOKABLE void start();
-    Q_INVOKABLE void stop(){};
+    Q_INVOKABLE void stop();
 
-    QString get_text(void)
-    {
-        return text;
-    }
-    QString get_source(void)
-    {
-        return source;
-    }
+    QString get_text(void)const{return text;}
+    QString get_source(void)const{return source;}
 
 #ifdef USE_EMSCRIPTEN
     static QRImageDecoder* getdecoder(){return m_decoder;};
-
 #endif
      void reload(int offset, int width, int height);
 signals:
     void text_changed();
     void source_changed();
 private:
+    State m_state;
 #ifdef USE_EMSCRIPTEN
     static QRImageDecoder* m_decoder;
-#endif
-    void setid();
-    void getCamera(void);
-    void decodePicture(QImage picture);
-    QString text,source;
+#else
     QCamera* m_camera;
     QMediaCaptureSession* captureSession;
     QVideoSink* videoSink;
-    MyQRCodeDetector* detector;
+    void getCamera(void);
+#endif
+    void setid();
+    void decodePicture(QImage picture);
+    QString text,source;
+    QRDecoder detector;
 };
 
 
