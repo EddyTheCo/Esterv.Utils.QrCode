@@ -60,7 +60,6 @@ private:
     void decodePicture(QImage picture);
     QString text,source;
     QRDecoder detector;
-    std::thread* decthread;
 };
 
 

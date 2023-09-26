@@ -137,7 +137,8 @@ QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),
                              setid();
                              if(m_state)
                              {
-                                 decthread = new std::thread(&QRImageDecoder::decodePicture, this,picture);
+                                 auto var= std::thread(&QRImageDecoder::decodePicture, this,picture);
+                                 var.detach();
                              }
                          }
 
