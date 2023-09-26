@@ -131,15 +131,14 @@ QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),
                      {
 
                          if(m_camera&&m_camera->isActive()){
-
                              auto picture=Vframe.toImage();
                              WasmImageProvider::img=picture;
                              setid();
-                             if(m_state)
-                             {
-                                 auto var= std::thread(&QRImageDecoder::decodePicture, this,picture);
-                                 var.detach();
-                             }
+
+                             auto var = std::thread(&QRImageDecoder::decodePicture, this,picture);
+                             var.detach();
+
+
                          }
 
                      });
@@ -192,21 +191,22 @@ void QRImageDecoder::start()
 
 void QRImageDecoder::decodePicture(QImage picture)
 {
-    m_state=Decoding;
+
     picture.convertTo(QImage::Format_Grayscale8);
 
     const auto str = detector.decode_grey(picture.bits(), picture.height(),picture.bytesPerLine());
     const auto qstr=QString::fromStdString(str);
     if(qstr!="")
     {
+        mutex.lock();
         text=qstr;
 #ifndef USE_EMSCRIPTEN
         if(m_camera)m_camera->stop();
 #endif
         emit text_changed();
-
+        mutex.unlock();
     }
-    m_state=Ready;
+
 }
 
 QImage WasmImageProvider::img=QImage();
@@ -224,7 +224,7 @@ void QRImageDecoder::reload(int offset,  int width, int height)
 void QRImageDecoder::setid()
 {
     static quint8 index=0;
-    source=QString::number(index);
+    source="qrimage"+QString::number(index);
     emit source_changed();
     index++;
 }
