@@ -82,7 +82,6 @@ EM_JS(void, js_stop, (), {
     }
 });
 #else
-#include<thread>
 #if QT_CONFIG(permissions)
 #include <QPermission>
 #endif
@@ -138,8 +137,7 @@ QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),
                              setid();
                              if(m_state)
                              {
-                                 auto var= std::thread(&QRImageDecoder::decodePicture, this,picture);
-                                 var.detach();
+                                 decthread = new std::thread(&QRImageDecoder::decodePicture, this,picture);
                              }
                          }
 

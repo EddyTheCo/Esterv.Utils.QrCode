@@ -4,11 +4,14 @@
 #include<QImage>
 #include<QBuffer>
 #include <qquickimageprovider.h>
+#ifndef USE_EMSCRIPTEN
 #include <QMediaDevices>
 #include <QCameraDevice>
 #include <QCamera>
 #include <QMediaCaptureSession>
 #include <QVideoSink>
+#include<thread>
+#endif
 #include <qrcodedec.hpp>
 
 //foo namespace to force the linker to link the backing library composed only of qml files
@@ -57,6 +60,7 @@ private:
     void decodePicture(QImage picture);
     QString text,source;
     QRDecoder detector;
+    std::thread* decthread;
 };
 
 
