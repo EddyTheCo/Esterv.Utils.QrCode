@@ -1,67 +1,51 @@
 import QtQuick 2.0
-import QtMultimedia
-import QtQrDec
+import QtQuick.Controls
 import MyDesigns
+import QtQrDec
 Item
 {
+
     id:root
     signal gotdata(string data);
     function stop() {
-        timer.stop();
-        camera.stop();
+        QRImageDecoder.stop();
         startcamera.visible=true;
-        }
-
-    VideoOutput {
-        id: videoOutput
-        anchors.fill: root
     }
-    Camera {
-        id: camera
-        active: false
-        onErrorOccurred: (error,errorString)=> {
-                             console.log(errorString)
-                             console.log(error)
-                         }
 
-    }
     Connections {
         target: QRImageDecoder
         function onText_changed(boo) {
             root.gotdata(QRImageDecoder.text)
         }
     }
-    CaptureSession {
-        id: capturesession
-        camera: camera
-        videoOutput: videoOutput
-        imageCapture: ImageCapture {
-            id: imageCapture
-            onImageCaptured: {
-                QRImageDecoder.source = imageCapture.preview
-            }
-
-        }
+    Image {
+        id: preview
+        anchors.fill: root
+        cache : false
+        source: "image://wasm/"+QRImageDecoder.source
+        visible: !startcamera.visible
     }
-    Timer {
-        id: timer
-        interval: 500; running: false; repeat: true
-        onTriggered: imageCapture.capture()
+    Switch {
+        id:useTorch
+        opacity: checked ? 0.75 : 0.25
+        anchors.bottom: preview.bottom
+        anchors.horizontalCenter: preview.horizontalCenter
+        visible:!startcamera.visible&&QRImageDecoder.hasTorch
+        onCheckedChanged:
+        {
+            QRImageDecoder.useTorch=useTorch.checked;
+        }
     }
     MyButton
     {
         id:startcamera
         anchors.centerIn: root
-        text:qsTr("ScanQr")
+        text:qsTr("Scan Qr")
         onClicked:
         {
-            camera.start();
-            timer.start();
+            QRImageDecoder.start();
             startcamera.visible=false;
         }
-        width:100
-        height:width*0.5
     }
+
 }
-
-
