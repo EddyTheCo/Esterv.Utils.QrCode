@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls
 import MyDesigns
 import QtQrDec
 Item
@@ -24,7 +25,17 @@ Item
         source: "image://wasm/"+QRImageDecoder.source
         visible: !startcamera.visible
     }
-
+    Switch {
+        id:useTorch
+        opacity: checked ? 0.75 : 0.25
+        anchors.bottom: preview.bottom
+        anchors.horizontalCenter: preview.horizontalCenter
+        visible:!startcamera.visible&&QRImageDecoder.hasTorch
+        onCheckedChanged:
+        {
+            QRImageDecoder.useTorch=useTorch.checked;
+        }
+    }
     MyButton
     {
         id:startcamera

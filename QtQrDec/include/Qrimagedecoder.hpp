@@ -25,6 +25,8 @@ class QRImageDecoder : public QObject
     Q_OBJECT
     Q_PROPERTY(QString text READ get_text NOTIFY text_changed)
     Q_PROPERTY(QString source READ get_source NOTIFY source_changed)
+    Q_PROPERTY(bool useTorch MEMBER m_useTorch NOTIFY useTorchChanged)
+    Q_PROPERTY(bool hasTorch MEMBER m_hasTorch NOTIFY hasTorchChanged)
     QML_ELEMENT
     QML_SINGLETON
 public:
@@ -46,6 +48,8 @@ public:
 signals:
     void text_changed();
     void source_changed();
+    void hasTorchChanged();
+    void useTorchChanged();
 private:
     State m_state;
 #ifdef USE_EMSCRIPTEN
@@ -60,7 +64,7 @@ private:
     void decodePicture(QImage picture);
     QString text,source;
     QRDecoder detector;
-    std::mutex mutex;
+    bool m_useTorch,m_hasTorch;
 };
 
 
@@ -69,9 +73,10 @@ class WasmImageProvider : public QQuickImageProvider
 public:
     WasmImageProvider():QQuickImageProvider(QQuickImageProvider::Image)
     {
-
+        restart();
     }
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
+    static void restart(void);
     static QImage img;
 };
 
