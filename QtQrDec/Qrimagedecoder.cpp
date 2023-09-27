@@ -144,14 +144,15 @@ QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_useTorch(false
                          }
                          WasmImageProvider::restart();
                      });
-#endif
-
     connect(this,&QRImageDecoder::useTorchChanged,this,[=](){
         if(m_camera->isActive()&&m_useTorch)
             m_camera->setTorchMode(QCamera::TorchOn);
         else
             m_camera->setTorchMode(QCamera::TorchOff);
     });
+#endif
+
+
 };
 void QRImageDecoder::stop(){
 #ifdef USE_EMSCRIPTEN
