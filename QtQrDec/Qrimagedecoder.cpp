@@ -36,53 +36,43 @@ EM_JS(void, js_start, (), {
 
 				if(document.querySelector("#qrvideo")=== null)
 				{
-				var elemDiv = document.createElement('div');
+				let elemDiv = document.createElement('div');
 				elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
 				elemDiv.innerHTML += '<video controls autoplay id="qrvideo" width="'+width+'px" height="'+height+'px"></video><canvas id="qrcanvas" width="'+width+'px" height="'+height+'px" ></canvas></div>';
 				document.body.appendChild(elemDiv);
 				}
-				let video = document.querySelector("#qrvideo");
-				let canvas = document.querySelector("#qrcanvas");
+				var video = document.querySelector("#qrvideo");
+				var canvas = document.querySelector("#qrcanvas");
 
 				video.srcObject = stream;
 				window.localStream = stream;
-				getimage=setInterval(function() {
+				var ctx=canvas.getContext("2d",{ willReadFrequently: true });
+				const processFrame = function () {
 						//You need to define qtQR module when loading the module of the qt application.
-						canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-						let imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-						var sourceBuffer = imageData.data;
+						ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+						let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+						let sourceBuffer = imageData.data;
 
-						if (qrQR.module() != null) {
-						var buffer = qrQR.module()._malloc(sourceBuffer.byteLength);
+						if (qtQR.module() != null) {
+						let buffer = qtQR.module()._malloc(sourceBuffer.byteLength);
 						qtQR.module().HEAPU8.set(sourceBuffer, buffer);
 						qtQR.module().QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
 						qtQR.module()._free(buffer);
-						return result;
-						} else {
-						return { error: "qtQR not yet initialized" };
-						}
+						} 
+						if(window.localStream.active)requestAnimationFrame(processFrame);
+				};
+				processFrame();
 
-				}, 100);
 
 		}).catch(alert);
 
 
 		}
 
-
-
-
 });
 
 EM_JS(void, js_stop, (), {
-		try {
-		getimage;
-		clearInterval(getimage);
-		localStream.getVideoTracks()[0].stop();
-		}catch(e) {
-		e; // => ReferenceError
-		console.log('getimage is not defined');
-		}
+		window.localStream.getVideoTracks()[0].stop();
 		});
 #else
 #if QT_CONFIG(permissions)
