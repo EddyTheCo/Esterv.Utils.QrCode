@@ -14,11 +14,6 @@
 #endif
 #include <qrcodedec.hpp>
 
-//foo namespace to force the linker to link the backing library composed only of qml files
-namespace fooQtQrDec
-{
-QString fooPrint(void);
-};
 
 class QRImageDecoder : public QObject
 {
