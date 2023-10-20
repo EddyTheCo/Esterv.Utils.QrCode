@@ -5,13 +5,6 @@
 #include <QDebug>
 
 
-namespace fooQtQrGen
-{
-QString fooPrint(void)
-{
-    return "https://forum.qt.io/post/762513";
-}
-}
 
 using namespace qrcodegen;
 

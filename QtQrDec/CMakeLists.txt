@@ -1,6 +1,13 @@
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Multimedia)
 
+FetchContent_Declare(
+	MyDesigns
+	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+	GIT_TAG v0.3.1
+	FIND_PACKAGE_ARGS 0.3 CONFIG
+	)
+FetchContent_MakeAvailable(MyDesigns)
 
 
 if (Qt6_FOUND AND TARGET QrDec)
@@ -16,19 +23,21 @@ if (Qt6_FOUND AND TARGET QrDec)
 		"/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
-		${CMAKE_CURRENT_BINARY_DIR}/QtQrDec
-		IMPORT_PATH ${QML_IMPORT_PATH}
+		${CMAKE_BINARY_DIR}/QtQrDec
+		IMPORT_PATH ${CMAKE_BINARY_DIR}
 		)
 	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 
         target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec)
-        target_link_libraries(QtQrDec PRIVATE  MyDesigns)
+        target_link_libraries(QtQrDec PRIVATE  MyDesigns
+		$<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>
+		)
 
 	if(TARGET Qt6::Multimedia)
 		target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
 	endif(TARGET Qt6::Multimedia)
-	install(TARGETS QtQrDec  ${out_targets_var}
+	install(TARGETS QtQrDec QtQrDecplugin ${out_targets_var}
 		EXPORT qrCodeTargets
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT QtQr
@@ -37,10 +46,12 @@ if (Qt6_FOUND AND TARGET QrDec)
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qrCode
 		COMPONENT QtQr
 		)
+	install(DIRECTORY ${CMAKE_BINARY_DIR}/QtQrDec/
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/QMLPlugins/QtQrDec
+		COMPONENT QtQr
+		)
+
 	if(EMSCRIPTEN)
                 target_compile_definitions(QtQrDec PUBLIC USE_EMSCRIPTEN)
 	endif(EMSCRIPTEN)
 endif(Qt6_FOUND AND TARGET QrDec)
-list(APPEND QML_IMPORT_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR})
-list(REMOVE_DUPLICATES QML_IMPORT_PATH)
-set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
