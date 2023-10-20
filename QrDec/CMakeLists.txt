@@ -32,7 +32,7 @@ if(NOT OpenCV_FOUND )
 		endif(ANDROID)
 		find_package(OpenCV COMPONENTS core objdetect imgproc flann features2d calib3d )
 	endif()
-	if(OpenCV_FOUND)
+	if(OpenCV_FOUND AND NOT ANDROID )
 		install(IMPORTED_RUNTIME_ARTIFACTS ${OpenCV_LIBS}
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			COMPONENT Qr
