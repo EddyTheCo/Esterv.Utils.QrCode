@@ -23,36 +23,42 @@ EM_JS(void, js_start, (), {
 
 		if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
 		stream = navigator.mediaDevices.getUserMedia({  video: { facingMode: 'environment' }, audio: false }).then((stream) => {
-				let settings = stream.getVideoTracks()[0].getSettings();
-				let width = settings.width;
-				let height = settings.height;
+                const settings = stream.getVideoTracks()[0].getSettings();
+                const width = settings.width;
+                const height = settings.height;
 
 				if(document.querySelector("#qrvideo")=== null)
 				{
 				let elemDiv = document.createElement('div');
-				elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
+                elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
 				elemDiv.innerHTML += '<video controls autoplay id="qrvideo" width="'+width+'px" height="'+height+'px"></video><canvas id="qrcanvas" width="'+width+'px" height="'+height+'px" ></canvas></div>';
 				document.body.appendChild(elemDiv);
 				}
-				var video = document.querySelector("#qrvideo");
-				var canvas = document.querySelector("#qrcanvas");
+                const video = document.querySelector("#qrvideo");
+                video.srcObject = stream;
+                window.localStream = stream;
 
-				video.srcObject = stream;
-				window.localStream = stream;
-				var ctx=canvas.getContext("2d",{ willReadFrequently: true });
+                let canvas = document.querySelector("#qrcanvas");
+                let ctx=canvas.getContext("2d");
 				const processFrame = function () {
-						//You need to define qtQR module when loading the module of the qt application.
-						ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-						let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-						let sourceBuffer = imageData.data;
-
-						if (qtQR.module() != null) {
-						let buffer = qtQR.module()._malloc(sourceBuffer.byteLength);
-						qtQR.module().HEAPU8.set(sourceBuffer, buffer);
-						qtQR.module().QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
-						qtQR.module()._free(buffer);
-						} 
-						if(window.localStream.active)requestAnimationFrame(processFrame);
+                        //You need to define qtQR module when loading the module of the qt application.
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const sourceBuffer = imageData.data;
+                        if (qtQR.module() != null) {
+                        const buffer = qtQR.module()._malloc(sourceBuffer.byteLength);
+                        qtQR.module().HEAPU8.set(sourceBuffer, buffer);
+                        qtQR.module().QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
+                        qtQR.module()._free(buffer);
+                        }
+                        if(window.localStream.active)
+                        {
+                          requestAnimationFrame(processFrame);
+                        }
+                        else
+                        {
+                           ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        }
 				};
 				processFrame();
 
@@ -65,7 +71,7 @@ EM_JS(void, js_start, (), {
 });
 
 EM_JS(void, js_stop, (), {
-		window.localStream.getVideoTracks()[0].stop();
+        if(window.localStream)window.localStream.getVideoTracks()[0].stop();
 		});
 #else
 #if QT_CONFIG(permissions)
@@ -125,10 +131,7 @@ QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_useTorch(false
 			auto var = std::thread(&QRImageDecoder::decodePicture, this,picture);
 			var.detach();
 			}
-
-
 			}
-			WasmImageProvider::restart();
 			});
 	connect(this,&QRImageDecoder::useTorchChanged,this,[=](){
 			if(m_camera->isActive()&&m_useTorch)
@@ -206,7 +209,7 @@ void QRImageDecoder::decodePicture(QImage picture)
 	if(qstr!="")
 	{
 		text=qstr;
-		emit text_changed();
+        emit text_changed();
 	}
 	m_state=QRImageDecoder::Ready;
 }
@@ -216,17 +219,22 @@ QImage WasmImageProvider::requestImage(const QString &id, QSize *size, const QSi
 {
 	return img;
 }
+void QRImageDecoder::clear(void)
+{
+    WasmImageProvider::restart();
+    setid();
+}
 void WasmImageProvider::restart(void)
 {
-	WasmImageProvider::img=QImage(QSize(200,150),QImage::Format_RGBA8888);
-	WasmImageProvider::img.fill("black");
+    WasmImageProvider::img=QImage(QSize(200,150),QImage::Format_RGBA8888);
+    WasmImageProvider::img.fill("black");
 }
 void QRImageDecoder::reload(int offset,  int width, int height)
 {
 	auto imgarr = reinterpret_cast<uchar*>(offset);
 	WasmImageProvider::img=QImage(imgarr,width,height,QImage::Format_RGBA8888);
-	setid();
-	decodePicture(WasmImageProvider::img);
+    setid();
+    if(m_state)decodePicture(WasmImageProvider::img);
 }
 void QRImageDecoder::setid()
 {

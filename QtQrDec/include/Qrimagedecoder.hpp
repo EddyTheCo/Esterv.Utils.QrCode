@@ -32,7 +32,7 @@ public:
     };
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
-
+    Q_INVOKABLE void clear();
     QString get_text(void)const{return text;}
     QString get_source(void)const{return source;}
 
