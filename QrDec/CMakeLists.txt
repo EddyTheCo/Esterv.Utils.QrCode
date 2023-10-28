@@ -1,5 +1,7 @@
 find_package(OpenCV COMPONENTS core objdetect imgproc flann features2d calib3d )
-if(NOT OpenCV_FOUND )
+
+option(OpenCV_DOWNLOAD "On or off" ON)
+if(NOT OpenCV_FOUND AND OpenCV_DOWNLOAD)
 	set(builturl "https://github.com/EddyTheCo/install-OpenCV-action/releases/latest/download/OpenCV-ubuntu-latest-wasm_false-android_none.tar")
 	if(WIN32)
 		set(builturl "https://github.com/EddyTheCo/install-OpenCV-action/releases/latest/download/OpenCV-windows-latest-wasm_false-android_none.tar")
