@@ -1,4 +1,11 @@
 find_package(Qt6 COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Svg)
+FetchContent_Declare(
+	MyDesigns
+	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+	GIT_TAG v0.3.1
+	FIND_PACKAGE_ARGS 0.3 CONFIG
+	)
+FetchContent_MakeAvailable(MyDesigns)
 
 if (Qt6_FOUND)
 	qt_standard_project_setup()
@@ -6,6 +13,10 @@ if (Qt6_FOUND)
 		URI  QtQrGen
 		VERSION 1.0
 		SOURCES Qrimageprovider.cpp include/Qrimageprovider.hpp
+		QML_FILES
+		qml/AddressQr.qml
+		qml/PayQrPop.qml
+		qml/QrLabel.qml
 		RESOURCE_PREFIX
 		"/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var
@@ -36,6 +47,8 @@ if (Qt6_FOUND)
 		Qt6::Gui
 		Qt6::Qml
 		Qt6::Svg
+		MyDesigns
+		$<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>
 		)
 
 	install(TARGETS QtQrGen QtQrGenplugin ${out_targets_var}
