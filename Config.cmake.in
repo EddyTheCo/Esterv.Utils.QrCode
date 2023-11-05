@@ -2,5 +2,5 @@
 include(CMakeFindDependencyMacro)
 find_dependency(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Svg OPTIONAL_COMPONENTS Multimedia )
 find_dependency(OpenCV REQUIRED COMPONENTS core objdetect )
-find_dependency(MyDesigns 0.3 REQUIRED  CONFIG)
+find_dependency(MyDesigns 0.4 REQUIRED  CONFIG)
 include ( "${CMAKE_CURRENT_LIST_DIR}/qrCodeTargets.cmake" )

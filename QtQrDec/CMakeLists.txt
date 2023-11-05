@@ -3,8 +3,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Mult
 FetchContent_Declare(
 	MyDesigns
 	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-	GIT_TAG v0.3.1
-	FIND_PACKAGE_ARGS 0.3 CONFIG
+	GIT_TAG v0.4.1
+	FIND_PACKAGE_ARGS 0.4 CONFIG
 	)
 FetchContent_MakeAvailable(MyDesigns)
 if (Qt6_FOUND AND TARGET QrDec)
