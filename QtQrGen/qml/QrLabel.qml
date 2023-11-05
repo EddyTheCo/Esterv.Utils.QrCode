@@ -1,6 +1,8 @@
 import QtQuick.Controls
 import QtQuick
 import MyDesigns
+import QtQrGen
+
 
 
 Text
