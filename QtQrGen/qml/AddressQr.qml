@@ -1,6 +1,7 @@
 import QtQuick.Controls
 import QtQuick
 import MyDesigns
+import QtQrGen
 
 Rectangle {
     id:root

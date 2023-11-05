@@ -1,15 +1,12 @@
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Multimedia)
-
 FetchContent_Declare(
 	MyDesigns
 	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-	GIT_TAG v0.3.1
-	FIND_PACKAGE_ARGS 0.3 CONFIG
+	GIT_TAG v0.4.1
+	FIND_PACKAGE_ARGS 0.4 CONFIG
 	)
 FetchContent_MakeAvailable(MyDesigns)
-
-
 if (Qt6_FOUND AND TARGET QrDec)
 	qt_standard_project_setup()
 	qt6_add_qml_module(QtQrDec
@@ -17,8 +14,9 @@ if (Qt6_FOUND AND TARGET QrDec)
 		VERSION 1.0
 		SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
                 QML_FILES
-                qml/QrTextArea.qml
                 qml/QrQmlCamera.qml
+		qml/QrCam.qml
+		qml/QrTextCamPop.qml
 		RESOURCE_PREFIX
 		"/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var
@@ -29,14 +27,9 @@ if (Qt6_FOUND AND TARGET QrDec)
 	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 
-        target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec)
-        target_link_libraries(QtQrDec PRIVATE  MyDesigns
-		$<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>
-		)
+        target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec $<TARGET_NAME_IF_EXISTS:Qt6::Multimedia> MyDesigns
+		$<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>)
 
-	if(TARGET Qt6::Multimedia)
-		target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
-	endif(TARGET Qt6::Multimedia)
 	install(TARGETS QtQrDec QtQrDecplugin ${out_targets_var}
 		EXPORT qrCodeTargets
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}

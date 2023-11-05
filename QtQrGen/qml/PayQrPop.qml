@@ -2,13 +2,13 @@ import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
 import MyDesigns
+import QtQrGen
 
 Popup {
     id: root
     required property string address;
     property string url;
     required property string description;
-    property alias textarea:tex
     property alias qrcode:qrcode_;
 
     background: Rectangle
@@ -41,6 +41,7 @@ Popup {
             textarea.wrapMode: Text.Wrap
         }
 
+
         AddressQr
         {
             id:qrcode_
@@ -48,12 +49,9 @@ Popup {
             url:root.url
             Layout.preferredWidth: tex.width*0.75
             Layout.preferredHeight: width
-
             Layout.alignment: Qt.AlignCenter
         }
     }
-
-
 
 }
 

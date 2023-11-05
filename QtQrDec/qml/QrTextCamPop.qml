@@ -3,17 +3,19 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import MyDesigns
 import QtQrDec
+
 Popup
 {
     id:popup_
-    property string description;
-    property string placeholder;
+    property alias label:tfield.label;
+    property alias textField:tfield.textarea;
+
     signal clicked(string data);
 
     onClosed: qrscanner.stop();
     onOpened:{
-        qrscanner.stop();
-        recaddress.textarea.text="";
+        tfield.textarea.text="";
+        qrscanner.visible=false;
     }
 
     background: Rectangle
@@ -29,19 +31,22 @@ Popup
         anchors.fill: parent
         MyTextArea
         {
-            id:recaddress
-            label.text: (popup_.description)?popup_.description:""
-            textarea.placeholderText: (popup_.placeholder)?popup_.placeholder:""
+            id:tfield
             Layout.alignment: Qt.AlignHCenter
             Layout.margins:  20
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.maximumWidth:400
+            Layout.maximumWidth:250
             Layout.maximumHeight: 200
-            Layout.minimumHeight: 100
             focus:true
+            qrfill:true
+            onFillqr:
+            {
+                qrscanner.start();
+                qrscanner.visible=true;
+
+            }
         }
-        QrQmlCamera
+        QrCam
         {
             id:qrscanner
             Layout.alignment: Qt.AlignCenter
@@ -50,9 +55,13 @@ Popup
             Layout.fillWidth: true
             Layout.minimumWidth:100
             Layout.minimumHeight: 200
+            Layout.maximumWidth:  300
+            visible:false
+            showClose:true
             onGotdata: (data)=> {
                            qrscanner.stop();
-                           recaddress.textarea.text=data;
+                           qrscanner.visible=false;
+                           tfield.textarea.text=data;
                        }
         }
         MyButton
@@ -60,15 +69,14 @@ Popup
             id:send
             Layout.alignment: Qt.AlignRight
             Layout.margins:  15
-            enabled: recaddress.textarea.text!==""
+            enabled: tfield.textarea.text
             onClicked:
             {
                 popup_.close();
-                popup_.clicked(recaddress.textarea.text);
+                popup_.clicked(tfield.textarea.text);
             }
             text:qsTr("Ok")
         }
 
     }
 }
-
