@@ -41,14 +41,15 @@ EM_JS(void, js_start, (), {
                 let canvas = document.querySelector("#qrcanvas");
                 let ctx=canvas.getContext("2d");
 				const processFrame = function () {
-				//You need to define qtQR module when loading the module of the qt application.
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                         const sourceBuffer = imageData.data;
-                        const buffer = qtQR._malloc(sourceBuffer.byteLength);
-                        qtQR.HEAPU8.set(sourceBuffer, buffer);
-                        qtQR.QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
-                        qtQR._free(buffer);
+			if (Module != null) {
+                        const buffer = Module._malloc(sourceBuffer.byteLength);
+                        Module.HEAPU8.set(sourceBuffer, buffer);
+                        Module.QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
+                        Module._free(buffer);
+			}
                         if(window.localStream.active)
                         {
                           requestAnimationFrame(processFrame);
