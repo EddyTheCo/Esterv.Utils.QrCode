@@ -13,8 +13,8 @@ if (Qt6_FOUND AND TARGET QrDec)
 		URI  QtQrDec
 		VERSION 1.0
 		SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
-                QML_FILES
-                qml/QrQmlCamera.qml
+		QML_FILES
+		qml/QrQmlCamera.qml
 		qml/QrCam.qml
 		qml/QrTextCamPop.qml
 		RESOURCE_PREFIX
@@ -24,10 +24,11 @@ if (Qt6_FOUND AND TARGET QrDec)
 		${CMAKE_BINARY_DIR}/QtQrDec
 		IMPORT_PATH ${CMAKE_BINARY_DIR}
 		)
+
 	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
 
-        target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec $<TARGET_NAME_IF_EXISTS:Qt6::Multimedia> MyDesigns
+	target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec $<TARGET_NAME_IF_EXISTS:Qt6::Multimedia> MyDesigns
 		$<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>)
 
 	install(TARGETS QtQrDec QtQrDecplugin ${out_targets_var}
@@ -45,6 +46,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		)
 
 	if(EMSCRIPTEN)
-                target_compile_definitions(QtQrDec PUBLIC USE_EMSCRIPTEN)
+		target_compile_definitions(QtQrDec PUBLIC USE_EMSCRIPTEN)
+		target_link_options(QtQrDec PRIVATE -sEXPORTED_FUNCTIONS=['_malloc'])
 	endif(EMSCRIPTEN)
 endif(Qt6_FOUND AND TARGET QrDec)

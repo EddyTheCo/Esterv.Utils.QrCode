@@ -44,12 +44,10 @@ EM_JS(void, js_start, (), {
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                         const sourceBuffer = imageData.data;
-			if (Module != null) {
                         const buffer = Module._malloc(sourceBuffer.byteLength);
                         Module.HEAPU8.set(sourceBuffer, buffer);
                         Module.QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
                         Module._free(buffer);
-			}
                         if(window.localStream.active)
                         {
                           requestAnimationFrame(processFrame);
