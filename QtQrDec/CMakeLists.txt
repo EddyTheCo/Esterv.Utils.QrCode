@@ -47,6 +47,5 @@ if (Qt6_FOUND AND TARGET QrDec)
 
 	if(EMSCRIPTEN)
 		target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
-		target_link_options(QtQrDec PUBLIC -sEXPORTED_FUNCTIONS=['_malloc'])
 	endif(EMSCRIPTEN)
 endif(Qt6_FOUND AND TARGET QrDec)
