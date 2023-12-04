@@ -15,16 +15,6 @@ version_from_git(
 	)
 project(qrCode VERSION ${VERSION} DESCRIPTION "library for qr code manipulation" LANGUAGES CXX)
 
-set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-	message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
-	set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
-		STRING "Choose the type of build." FORCE)
-	# Set the possible values of build type for cmake-gui
-	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-		"Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -32,39 +22,40 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
 
+add_subdirectory(QrDec)
 add_subdirectory(QrGen)
+add_subdirectory(QtQrDec)
 add_subdirectory(QtQrGen)
 
 
-add_subdirectory(QrDec)
-add_subdirectory(QtQrDec)
 
-install(EXPORT qrCodeTargets
-        FILE qrCodeTargets.cmake
-        NAMESPACE qrCode::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qrCode
-	COMPONENT qrCode
+install(EXPORT ${PROJECT_NAME}-config
+	FILE ${PROJECT_NAME}-config.cmake
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/EstervQt
+	NAMESPACE ${PROJECT_NAME}::
+	COMPONENT All
 	)
 include(CMakePackageConfigHelpers)
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/qrCodeConfig.cmake"
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qrCode
+	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/EstervQt
 	)
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/qrCodeConfigVersion.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
 	VERSION ${VERSION}
 	COMPATIBILITY SameMajorVersion
 	)
 install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/qrCodeConfig.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/qrCodeConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qrCode
+	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/EstervQt
 	)
-export(EXPORT qrCodeTargets
-        FILE "${CMAKE_CURRENT_BINARY_DIR}/qrCodeTargets.cmake"
+export(EXPORT ${PROJECT_NAME}-config
+	FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
 	)
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-	set(CPACK_PACKAGE_CONTACT "estervtech")	
+	set(CPACK_PACKAGE_CONTACT "estervtech")
 	include(CTest)
 	set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")
 	if(NOT BUILD_SHARED_LIBS)
