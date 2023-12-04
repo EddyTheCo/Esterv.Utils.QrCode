@@ -18,6 +18,8 @@ if (Qt6_FOUND)
 		IMPORT_PATH ${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_LIBDIR}
 		)
 
+	add_library(${PROJECT_NAME}::QtQrGen ALIAS QtQrGen)
+	add_library(${PROJECT_NAME}::QtQrGenplugin ALIAS QtQrGenplugin)
 
 	target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")

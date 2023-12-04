@@ -27,6 +27,8 @@ if (Qt6_FOUND AND TARGET QrDec)
 		IMPORT_PATH ${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_LIBDIR}
 		)
 
+	add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
+	add_library(${PROJECT_NAME}::QtQrDecplugin ALIAS QtQrDecplugin)
 	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
