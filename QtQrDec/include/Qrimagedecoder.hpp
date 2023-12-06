@@ -4,6 +4,7 @@
 #include<QImage>
 #include<QBuffer>
 #include <qquickimageprovider.h>
+
 #ifndef USE_EMSCRIPTEN
 #include <QMediaDevices>
 #include <QCameraDevice>
@@ -12,6 +13,7 @@
 #include <QVideoSink>
 #include <thread>
 #endif
+
 #include <qrcodedec.hpp>
 
 
@@ -24,8 +26,14 @@ class QRImageDecoder : public QObject
     Q_PROPERTY(bool hasTorch MEMBER m_hasTorch NOTIFY hasTorchChanged)
     QML_ELEMENT
     QML_SINGLETON
-public:
+
     QRImageDecoder(QObject *parent = nullptr);
+public:
+    static QRImageDecoder* instance();
+    static QRImageDecoder *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+    {
+        return instance();
+    }
     enum State {
         Decoding = 0,
         Ready
@@ -36,9 +44,7 @@ public:
     QString get_text(void)const{return text;}
     QString get_source(void)const{return source;}
 
-#ifdef USE_EMSCRIPTEN
-    static QRImageDecoder* getdecoder(){return m_decoder;};
-#endif
+
      void reload(int offset, int width, int height);
 signals:
     void text_changed();
@@ -47,9 +53,7 @@ signals:
     void useTorchChanged();
 private:
     State m_state;
-#ifdef USE_EMSCRIPTEN
-    static QRImageDecoder* m_decoder;
-#else
+#ifndef USE_EMSCRIPTEN
     QCamera* m_camera;
     QMediaCaptureSession* captureSession;
     QVideoSink* videoSink;
@@ -60,6 +64,7 @@ private:
     QString text,source;
     QRDecoder detector;
     bool m_useTorch,m_hasTorch;
+    static QRImageDecoder* m_instance;
 };
 
 

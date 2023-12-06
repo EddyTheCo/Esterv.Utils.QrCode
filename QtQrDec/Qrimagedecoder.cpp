@@ -5,18 +5,18 @@
 #include <QGuiApplication>
 
 
-
+QRImageDecoder* QRImageDecoder::m_instance=nullptr;
 
 #ifdef USE_EMSCRIPTEN
 
 #include <emscripten.h>
 #include <emscripten/bind.h>
-QRImageDecoder* QRImageDecoder::m_decoder=nullptr;
+
 
 EMSCRIPTEN_BINDINGS(qrdecoder) {
 	emscripten::class_<QRImageDecoder>("QRImageDecoder")
 		.function("reload", &QRImageDecoder::reload,emscripten::allow_raw_pointers())
-		.class_function("getdecoder", &QRImageDecoder::getdecoder, emscripten::allow_raw_pointers());
+        .class_function("instance", &QRImageDecoder::instance, emscripten::allow_raw_pointers());
 }
 
 EM_JS(void, js_start, (), {
@@ -46,7 +46,7 @@ EM_JS(void, js_start, (), {
                         const sourceBuffer = imageData.data;
                         const buffer = _malloc(sourceBuffer.byteLength);
                         HEAPU8.set(sourceBuffer, buffer);
-                        Module.QRImageDecoder.getdecoder().reload(buffer,video.width,video.height);
+                        Module.QRImageDecoder.instance().reload(buffer,video.width,video.height);
                         _free(buffer);
                         if(window.localStream.active)
                         {
@@ -104,17 +104,18 @@ void QRImageDecoder::getCamera(void)
 }
 
 #endif
-
+QRImageDecoder* QRImageDecoder::instance()
+{
+    if (!m_instance) m_instance=new QRImageDecoder();
+    return m_instance;
+}
 QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_useTorch(false),m_hasTorch(false),
 #ifndef USE_EMSCRIPTEN
 	m_camera(nullptr),captureSession(new QMediaCaptureSession(this)),videoSink(new QVideoSink(this)),
 #endif
 	m_state(Ready)
 {
-#ifdef USE_EMSCRIPTEN
-	m_decoder=this;
-#else
-
+#ifndef USE_EMSCRIPTEN
 	captureSession->setVideoOutput(videoSink);
 	QObject::connect(videoSink,&QVideoSink::videoFrameChanged,this,[=](const QVideoFrame & Vframe)
 			{

@@ -1,79 +1,85 @@
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick ShaderTools OPTIONAL_COMPONENTS Multimedia)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick ShaderTools)
+if(NOT EMSCRIPTEN)
+    find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+endif(NOT EMSCRIPTEN)
+
 FetchContent_Declare(
-	EstervDesigns
-	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-	GIT_TAG improvements
-	FIND_PACKAGE_ARGS 0.4 COMPONENTS SimpleStyle CustomControls CONFIG
-	)
+    EstervDesigns
+    GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+    GIT_TAG improvements
+    FIND_PACKAGE_ARGS 0.4 COMPONENTS SimpleStyle CustomControls CONFIG
+)
 FetchContent_MakeAvailable(EstervDesigns)
 
 
 if (Qt6_FOUND AND TARGET QrDec)
-	qt_standard_project_setup()
-	qt6_add_qml_module(QtQrDec
-		URI  Esterv.CustomControls.QrDec
-		VERSION ${VERSION}
-		SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
-		QML_FILES
-		qml/QrCam.qml
-		qml/QrTextCamPop.qml
-		RESOURCE_PREFIX
-		"/esterVtech.com/imports"
-		OUTPUT_TARGETS out_targets_var
-		OUTPUT_DIRECTORY
-		${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
-		IMPORT_PATH ${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_LIBDIR}
-		)
+    qt_standard_project_setup()
+    qt6_add_qml_module(QtQrDec
+        URI  Esterv.CustomControls.QrDec
+        VERSION 1.0
+        SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
+        QML_FILES
+        qml/QrCam.qml
+        qml/QrTextCamPop.qml
+        RESOURCE_PREFIX
+        "/esterVtech.com/imports"
+        OUTPUT_TARGETS out_targets_var
+        OUTPUT_DIRECTORY
+        ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
+        IMPORT_PATH ${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_LIBDIR}
+    )
 
-	add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
-	add_library(${PROJECT_NAME}::QtQrDecplugin ALIAS QtQrDecplugin)
+add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
+add_library(${PROJECT_NAME}::QtQrDecplugin ALIAS QtQrDecplugin)
 
 
-	qt6_add_shaders(QtQrDec "esterVtech.com.imports.QtQrDec.shaders"
-		BATCHABLE
-		PRECOMPILE
-		OPTIMIZED
-		OUTPUT_TARGETS out_targets_var2
-		PREFIX
-		"/esterVtech.com/imports/Designs"
-		FILES
-		"frag/qrscanner.frag"
-		)
-	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
+qt6_add_shaders(QtQrDec "esterVtech.com.imports.QtQrDec.shaders"
+    BATCHABLE
+    PRECOMPILE
+    OPTIMIZED
+    OUTPUT_TARGETS out_targets_var2
+    PREFIX
+    "/esterVtech.com/imports/Designs"
+    FILES
+    "frag/qrscanner.frag"
+)
+target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
+if(NOT EMSCRIPTEN)
+    target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
+endif(NOT EMSCRIPTEN)
+target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec Qt6::Multimedia
+    EstervDesigns::SimpleStyle EstervDesigns::customControls
+    $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
+    $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>)
 
-	target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec $<TARGET_NAME_IF_EXISTS:Qt6::Multimedia>
-		EstervDesigns::SimpleStyle EstervDesigns::customControls
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>)
+install(TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
+    EXPORT ${PROJECT_NAME}-config
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT QtQrDec
+)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}
+    COMPONENT QtQrDec
+)
+install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv
+    COMPONENT QtQrDec
+)
 
-        install(TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
-		EXPORT ${PROJECT_NAME}-config
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		COMPONENT QtQrDec
-		)
-	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}
-		COMPONENT QtQrDec
-		)
-	install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv
-		COMPONENT QtQrDec
-		)
+install(TARGETS QtQrDecplugin
+    EXPORT ${PROJECT_NAME}-config
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrDec
+    COMPONENT QtQrDec
+)
 
-	install(TARGETS QtQrDecplugin
-		EXPORT ${PROJECT_NAME}-config
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrDec
-		COMPONENT QtQrDec
-		)
-
-	if(EMSCRIPTEN)
-		target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
-	endif(EMSCRIPTEN)
-	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-		add_subdirectory(examples)
-	endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+if(EMSCRIPTEN)
+    target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
+endif(EMSCRIPTEN)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    add_subdirectory(examples)
+endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 else(Qt6_FOUND AND TARGET QrDec)
-	message(STATUS "The QML Module for QRCODE decoding will not be built")
+    message(STATUS "The QML Module for QRCODE decoding will not be built")
 endif(Qt6_FOUND AND TARGET QrDec)
