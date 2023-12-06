@@ -64,7 +64,7 @@ install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
     COMPONENT QtQrDec
 )
 install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls
     COMPONENT QtQrDec
 )
 

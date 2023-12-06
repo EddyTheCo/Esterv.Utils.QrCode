@@ -51,7 +51,7 @@ if (Qt6_FOUND)
 		COMPONENT QtQrGen
 		)
 	install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrGen
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv
+                DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls
 		COMPONENT QtQrGen
 		)
 
