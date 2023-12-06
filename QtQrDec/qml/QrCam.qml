@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import Esterv.Styles.Simple
 import Esterv.CustomControls
 import Esterv.CustomControls.QrDec
-
 Image
 {
     id:control
@@ -18,7 +17,6 @@ Image
         target: QRImageDecoder
         function onText_changed(boo) {
             control.gotdata(QRImageDecoder.text)
-            QRImageDecoder.clear();
         }
     }
 
