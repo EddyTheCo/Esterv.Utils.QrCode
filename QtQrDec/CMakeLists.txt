@@ -16,7 +16,6 @@ if (Qt6_FOUND AND TARGET QrDec)
 		VERSION ${VERSION}
 		SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
 		QML_FILES
-		qml/QrQmlCamera.qml
 		qml/QrCam.qml
 		qml/QrTextCamPop.qml
 		RESOURCE_PREFIX
@@ -29,6 +28,18 @@ if (Qt6_FOUND AND TARGET QrDec)
 
 	add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
 	add_library(${PROJECT_NAME}::QtQrDecplugin ALIAS QtQrDecplugin)
+
+
+	qt6_add_shaders(QtQrDec "esterVtech.com.imports.QtQrDec.shaders"
+		BATCHABLE
+		PRECOMPILE
+		OPTIMIZED
+		OUTPUT_TARGETS out_targets_var2
+		PREFIX
+		"/esterVtech.com/imports/Designs"
+		FILES
+		"frag/qrscanner.frag"
+		)
 	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
@@ -37,7 +48,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
 		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>)
 
-	install(TARGETS QtQrDec ${out_targets_var}
+        install(TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT QtQrDec
@@ -60,6 +71,9 @@ if (Qt6_FOUND AND TARGET QrDec)
 	if(EMSCRIPTEN)
 		target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
 	endif(EMSCRIPTEN)
+	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+		add_subdirectory(examples)
+	endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 else(Qt6_FOUND AND TARGET QrDec)
 	message(STATUS "The QML Module for QRCODE decoding will not be built")
 endif(Qt6_FOUND AND TARGET QrDec)

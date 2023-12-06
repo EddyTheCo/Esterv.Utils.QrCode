@@ -1,8 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
-import MyDesigns
-import QtQrDec
+import Esterv.Styles.Simple
+import Esterv.CustomControls
+import Esterv.CustomControls.QrDec
 
 Popup
 {

@@ -17,10 +17,11 @@ include(FetchContent)
  			)
 FetchContent_MakeAvailable(qrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> QrGen QtQrGen QrDec QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrGen qrCode::QtQrGen qrCode::QrDec qrCode::QtQrDec)
 ```
 For more information check
 
-
+- [QrGen] (QrGen/README.md)
+- [QrDec] (QrDec/README.md)
 - [QtQrGen](QtQrGen/README.md)
 - [QtQrDec](QtQrDec/README.md)
