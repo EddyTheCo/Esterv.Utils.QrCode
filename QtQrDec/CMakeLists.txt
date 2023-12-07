@@ -1,8 +1,9 @@
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick ShaderTools)
-if(NOT EMSCRIPTEN)
-    find_package(Qt6 REQUIRED COMPONENTS Multimedia)
-endif(NOT EMSCRIPTEN)
+if(EMSCRIPTEN)
+    find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools)
+else()
+    find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools Multimedia)
+endif(EMSCRIPTEN)
 
 FetchContent_Declare(
     EstervDesigns
@@ -20,8 +21,9 @@ if (Qt6_FOUND AND TARGET QrDec)
         VERSION 1.0
         SOURCES Qrimagedecoder.cpp include/Qrimagedecoder.hpp
         QML_FILES
-        qml/QrCam.qml
-        qml/QrTextCamPop.qml
+        "qml/QrCam.qml"
+        "qml/QrDecPop.qml"
+        "qml/QrTextField.qml"
         RESOURCE_PREFIX
         "/esterVtech.com/imports"
         OUTPUT_TARGETS out_targets_var
@@ -46,9 +48,11 @@ qt6_add_shaders(QtQrDec "esterVtech.com.imports.QtQrDec.shaders"
 )
 target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
-if(NOT EMSCRIPTEN)
+if(EMSCRIPTEN)
+    target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
+else()
     target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
-endif(NOT EMSCRIPTEN)
+endif(EMSCRIPTEN)
 target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec Qt6::Multimedia
     EstervDesigns::SimpleStyle EstervDesigns::customControls
     $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>

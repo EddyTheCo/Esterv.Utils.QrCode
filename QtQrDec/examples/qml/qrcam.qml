@@ -34,8 +34,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignBottom
-
-                text: QRImageDecoder.text
+                text: ""
                 elide:Text.ElideRight
                 color:Style.frontColor2
             }
@@ -56,8 +55,12 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.margins: 20
-
-
+        }
+        Connections {
+            target: QRImageDecoder
+            function onDecodedQR(data) {
+                label.text=data;
+            }
         }
     }
 

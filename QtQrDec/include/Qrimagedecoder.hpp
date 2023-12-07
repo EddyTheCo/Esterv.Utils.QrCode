@@ -20,8 +20,7 @@
 class QRImageDecoder : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString text READ get_text NOTIFY text_changed)
-    Q_PROPERTY(QString source READ get_source NOTIFY source_changed)
+    Q_PROPERTY(QString source READ get_source NOTIFY sourceChanged)
     Q_PROPERTY(bool useTorch MEMBER m_useTorch NOTIFY useTorchChanged)
     Q_PROPERTY(bool hasTorch MEMBER m_hasTorch NOTIFY hasTorchChanged)
     QML_ELEMENT
@@ -41,14 +40,13 @@ public:
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
     Q_INVOKABLE void clear();
-    QString get_text(void)const{return text;}
-    QString get_source(void)const{return source;}
+    QString get_source(void)const{return m_source;}
 
 
      void reload(int offset, int width, int height);
 signals:
-    void text_changed();
-    void source_changed();
+     void decodedQR(QString);
+    void sourceChanged();
     void hasTorchChanged();
     void useTorchChanged();
 private:
@@ -61,7 +59,7 @@ private:
 #endif
     void setid();
     void decodePicture(QImage picture);
-    QString text,source;
+    QString m_source;
     QRDecoder detector;
     bool m_useTorch,m_hasTorch;
     static QRImageDecoder* m_instance;
