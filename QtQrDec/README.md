@@ -10,18 +10,19 @@ If compiling for wasm the library creates a custom ImageProvider that communicat
 You can play with the decoder on [this page](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_dec)
  
 
+## Adding the libraries to your CMake project 
 To use the library on your CMake  project 
 ```
 include(FetchContent)
 FetchContent_Declare(
 	qrCode
 	GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
-	GIT_TAG main
-	FIND_PACKAGE_ARGS 0.4 COMPONENTS QtQrDec CONFIG  
+	GIT_TAG v1.0.0 
+	FIND_PACKAGE_ARGS 1.0 COMPONENTS QtQrDec CONFIG  
 )
 FetchContent_MakeAvailable(qrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> QrCode::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QtQrDec)
 ```
 
 

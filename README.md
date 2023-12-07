@@ -5,16 +5,16 @@ The GUI part will be based on Qt libraries and QML. Examples of this library com
 - [QtQrGen](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_gen)
 - [QtQrDec](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_dec)
 
-## Adding the libraries to your CMake project will be as easy as
+## Adding the libraries to your CMake project 
 
 ```CMake
 include(FetchContent)
-	FetchContent_Declare(
-			qrCode
-			GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
-			GIT_TAG v1.0.0 
-			FIND_PACKAGE_ARGS 1.0 CONFIG  
- 			)
+FetchContent_Declare(
+	qrCode
+	GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
+	GIT_TAG v1.0.0 
+	FIND_PACKAGE_ARGS 1.0 CONFIG  
+	)
 FetchContent_MakeAvailable(qrCode)
 
 target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrGen qrCode::QtQrGen qrCode::QrDec qrCode::QtQrDec)

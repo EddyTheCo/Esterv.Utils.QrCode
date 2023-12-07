@@ -12,10 +12,10 @@ include(FetchContent)
 FetchContent_Declare(
 	qrCode
 	GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
-	GIT_TAG main
-	FIND_PACKAGE_ARGS 0.4 COMPONENTS QtQrDec CONFIG  
+	GIT_TAG v1.0.0 
+	FIND_PACKAGE_ARGS 1.0 COMPONENTS QtQrGen CONFIG  
 )
 FetchContent_MakeAvailable(qrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> QrCode::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QtQrGen)
 ```
