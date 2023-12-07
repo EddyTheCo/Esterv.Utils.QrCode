@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls
-import QtQuick.Layouts
 import Esterv.Styles.Simple
 import Esterv.CustomControls.QrDec
 import Esterv.CustomControls

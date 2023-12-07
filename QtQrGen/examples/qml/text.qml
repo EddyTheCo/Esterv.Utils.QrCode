@@ -20,13 +20,13 @@ ApplicationWindow {
         id:themeswitch
     }
 
-    QrGenImage
+    QrText
     {
         anchors.horizontalCenter:parent.horizontalCenter
         anchors.top:themeswitch.bottom
+        text:"smr1qp9rtwlc00ksp0mvet8ugwvqu03ygzr8s3x77w3df9qw9srm3hwk2l0v9kf"
         width:parent.width*0.5
-        height:parent.height*0.5
-        textData:"https://eddytheco.github.io/"
+        font.pixelSize: 30
     }
 
 

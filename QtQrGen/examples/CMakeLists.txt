@@ -4,7 +4,7 @@ if(BUILD_EXAMPLES)
 		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS Controls CONFIG )
 	endif(EMSCRIPTEN)
 
-        foreach(example "image" 
+        foreach(example "image" "text"
 			)
 		qt_add_executable(${example} ${example}.cpp )
 

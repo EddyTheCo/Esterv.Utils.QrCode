@@ -9,9 +9,10 @@ using namespace qrcodegen;
 QPixmap QRImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
 	const int width = 100;
-    const QStringList strlist=id.split("/");
+    QStringList strlist=id.split('/');
     const auto color=strlist.front();
-    const auto data=strlist.back();
+    strlist.removeFirst();
+    const auto data=strlist.join('/');
 	const auto max=(requestedSize.width()>requestedSize.height())?requestedSize.width():requestedSize.height();
 
 	QPixmap pixmap(max > 0 ? max : width,

@@ -8,8 +8,8 @@ if (Qt6_FOUND)
         SOURCES Qrimageprovider.cpp include/Qrimageprovider.hpp
         QML_FILES
         "qml/QrGenImage.qml"
-        "qml/PayQrPop.qml"
-        "qml/QrLabel.qml"
+        "qml/QrGenPop.qml"
+        "qml/QrText.qml"
         RESOURCE_PREFIX
         "/esterVtech.com/imports"
         OUTPUT_TARGETS out_targets_var
@@ -20,6 +20,16 @@ if (Qt6_FOUND)
 
 add_library(${PROJECT_NAME}::QtQrGen ALIAS QtQrGen)
 add_library(${PROJECT_NAME}::QtQrGenplugin ALIAS QtQrGenplugin)
+qt6_add_shaders(QtQrGen "esterVtech.com.imports.QtQrGen.shaders"
+    BATCHABLE
+    PRECOMPILE
+    OPTIMIZED
+    OUTPUT_TARGETS out_targets_var2
+    PREFIX
+    "/esterVtech.com/imports/Designs"
+    FILES
+    "frag/qrscanner.frag"
+)
 
 target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
