@@ -9,7 +9,7 @@ Popup
 {
     id:control
     property bool showClose:true;
-    property string data:""
+    signal gotData(string data);
     onOpened: QRImageDecoder.start()
     onClosed: QRImageDecoder.stop()
     Connections {
@@ -17,7 +17,7 @@ Popup
         function onDecodedQR(data) {
             if(control.enabled&&control.visible)
             {
-                control.data=data;
+                control.gotData(data);
                 control.visible=false;
             }
         }

@@ -18,8 +18,10 @@ TextField
         anchors.centerIn: Overlay.overlay
         width:control.popWidth
         height:control.popHeight
+        onGotData: (data) =>{control.text=data;}
+
     }
-    text:qrpop.data
+
     Rectangle {
         id:qricon
         height:Math.min(parent.height,font.pixelSize)
