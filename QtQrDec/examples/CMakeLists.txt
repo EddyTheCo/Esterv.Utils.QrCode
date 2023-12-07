@@ -1,7 +1,7 @@
 if(BUILD_EXAMPLES)
 	if(EMSCRIPTEN)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS Controls CONFIG )
+		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS FlatControl CONFIG )
 	endif(EMSCRIPTEN)
 
         foreach(example "qrcam" "qrtext"
