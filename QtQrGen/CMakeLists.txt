@@ -51,7 +51,7 @@ target_link_libraries(QtQrGen PRIVATE QrGen Qt6::Core Qt6::Gui Qt6::Qml Qt6::Svg
     $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
     $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>)
 
-install(TARGETS QtQrGen ${out_targets_var}
+install(TARGETS QtQrGen ${out_targets_var} ${out_targets_var2}
     EXPORT ${PROJECT_NAME}-config
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT QtQrGen
