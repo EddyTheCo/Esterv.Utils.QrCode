@@ -21,7 +21,7 @@ Popup {
             Switch
             {
                 id:showdata
-                text: qsTr("Show")
+                text: qsTr("Show text")
             }
             CloseButton
             {
