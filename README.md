@@ -1,6 +1,7 @@
 # qrCode
 
 This repository is intended to provide a library for working with QR codes from c++. The main purpose is to exploit modern CMake and facilitate reuse and develop.
+
 The GUI part will be based on Qt libraries and QML. Examples of this library compiled for Web Assembly can be found on:
 - [QtQrGen](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_gen)
 - [QtQrDec](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_dec)
