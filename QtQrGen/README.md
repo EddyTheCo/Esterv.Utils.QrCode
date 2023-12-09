@@ -33,7 +33,7 @@ You can play with the  ImageProvider on [this page](https://eddytheco.github.io/
 include(FetchContent)
 FetchContent_Declare(
 	qrCode
-	GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
+	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
 	GIT_TAG v1.0.0 
 	FIND_PACKAGE_ARGS 1.0 COMPONENTS QtQrGen CONFIG  
 )

@@ -9,7 +9,7 @@ In case OpenCV is not found on your system CMake will download pre compiled libr
 include(FetchContent)
 FetchContent_Declare(
 	qrCode
-	GIT_REPOSITORY git@github.com:EddyTheCo/qrCode.git
+	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
 	GIT_TAG v1.0.0 
 	FIND_PACKAGE_ARGS 1.0 COMPONENTS QrDec CONFIG  
 )
