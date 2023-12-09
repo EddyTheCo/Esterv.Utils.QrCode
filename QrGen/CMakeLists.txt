@@ -1,23 +1,19 @@
 add_library(QrGen src/qrcodegen.cpp src/utils.cpp)
+add_library(${PROJECT_NAME}::QrGen ALIAS QrGen)
 
 set_target_properties(QrGen PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_compile_features(QrGen PUBLIC cxx_std_11)
 
 target_include_directories(QrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qrCode>")
+	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
-install(TARGETS QrGen 
-        EXPORT qrCodeTargets
+install(TARGETS QrGen
+	EXPORT ${PROJECT_NAME}-config
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	COMPONENT Qr
+	COMPONENT QrGen
 	)
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qrCode
-	COMPONENT Qr
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}
+	COMPONENT QrGen
 	)
 
-if(BUILD_DOCS)
-	get_target_property(build_docs cmake_build_docs SOURCES)
-	include(${build_docs})
-endif()

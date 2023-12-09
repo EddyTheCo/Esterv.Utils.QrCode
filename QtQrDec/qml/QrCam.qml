@@ -1,13 +1,16 @@
 import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
-import MyDesigns
-import QtQrDec
+import Esterv.Styles.Simple
 
-QrQmlCamera
+import Esterv.CustomControls.QrDec
+Image
 {
-    id:qrscanner
-    property bool showClose:false;
+    id:control
+
+
+    cache : false
+    source: "image://wasm/"+QRImageDecoder.source
 
     Switch {
         id:useTorch
@@ -19,19 +22,8 @@ QrQmlCamera
         {
             QRImageDecoder.useTorch=useTorch.checked;
         }
+        onVisibleChanged: useTorch.checked=false;
+        text:qsTr("Torch")
     }
-    CloseButton
-    {
-        id:cbutton
-        anchors.right: parent.right
-        anchors.top: parent.top
-        width: parent.width*0.15
-        height:width
-        visible: qrscanner.showClose
-        onClicked:
-        {
-            qrscanner.stop();
-            qrscanner.visible=false;
-        }
-    }
+
 }
