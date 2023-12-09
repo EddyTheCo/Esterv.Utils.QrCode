@@ -1,11 +1,21 @@
-# QrGen
+# QrDec
 
 This repo detect and decode a Qr code in a image.
-The compiled library depend on [opencv](https://opencv.org/)
- 
-CMake produce the target 'QrDec' so one can link to this library like
+The detection and decoding is performed by [OpenCV](https://opencv.org/) libraries.
+In case OpenCV is not found on your system CMake will download pre compiled libraries from [my action releases](https://github.com/EddyTheCo/install-OpenCV-action).
+
+## Adding the libraries to your CMake project 
 ```
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> QrDec)
+include(FetchContent)
+FetchContent_Declare(
+	qrCode
+	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	GIT_TAG v1.0.0 
+	FIND_PACKAGE_ARGS 1.0 COMPONENTS QrDec CONFIG  
+)
+FetchContent_MakeAvailable(qrCode)
+
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrDec)
 ```
 
 

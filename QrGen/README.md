@@ -1,9 +1,19 @@
 # QrGen
 
 The code is based on [QR Code generator library](https://github.com/nayuki/QR-Code-generator) and produce a library for the generation of a QR code of certain data.
-CMake produce the target 'QrGen' so one can link to this library like
+
+## Adding the libraries to your CMake project 
 ```
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> QrGen)
+include(FetchContent)
+FetchContent_Declare(
+	qrCode
+	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	GIT_TAG v1.0.0 
+	FIND_PACKAGE_ARGS 1.0 COMPONENTS QrGen CONFIG  
+)
+FetchContent_MakeAvailable(qrCode)
+
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrGen)
 ```
 
 
