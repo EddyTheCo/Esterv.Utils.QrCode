@@ -120,7 +120,7 @@ QRImageDecoder::QRImageDecoder(QObject *parent):QObject(parent),m_useTorch(false
     QObject::connect(videoSink,&QVideoSink::videoFrameChanged,this,[=](const QVideoFrame & Vframe)
                      {
 
-                         if(m_camera&&m_camera->isActive()){
+                         if(m_camera&&m_camera->isActive()&&Vframe.isValid()){
                              auto picture=Vframe.toImage();
                              WasmImageProvider::img=picture;
                              setid();
@@ -151,6 +151,7 @@ void QRImageDecoder::stop(){
 void QRImageDecoder::start()
 {
 #ifdef USE_EMSCRIPTEN
+    clear();
     js_start();
 #elif QT_CONFIG(permissions)
     QCameraPermission cPermission;
@@ -189,6 +190,7 @@ void QRImageDecoder::start()
         }
         if(m_camera)
         {
+            clear();
             m_camera->start();
         }
 
