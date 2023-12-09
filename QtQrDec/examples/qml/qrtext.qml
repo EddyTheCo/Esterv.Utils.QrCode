@@ -25,8 +25,8 @@ ApplicationWindow {
         anchors.horizontalCenter:parent.horizontalCenter
         width:300
         height:60
-        popWidth:parent.width*0.5
-        popHeight:parent.height*0.5
+        popWidth:Math.max(parent.width*0.5,300)
+        popHeight:Math.max(parent.height*0.5,500)
     }
 
 

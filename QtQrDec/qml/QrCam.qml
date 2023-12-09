@@ -22,6 +22,7 @@ Image
         {
             QRImageDecoder.useTorch=useTorch.checked;
         }
+        onVisibleChanged: useTorch.checked=false;
         text:qsTr("Torch")
     }
 
