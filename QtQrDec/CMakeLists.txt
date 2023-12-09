@@ -53,7 +53,7 @@ if(EMSCRIPTEN)
 else()
     target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
 endif(EMSCRIPTEN)
-target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec Qt6::Multimedia
+target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec
     EstervDesigns::SimpleStyle EstervDesigns::customControls
     $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
     $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>)

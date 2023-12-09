@@ -3,7 +3,7 @@
 #include <opencv2/objdetect.hpp>
 #include<string>
 
-class QRDecoder : public cv::QRCodeDetector
+class QRDecoder : public cv::QRCodeDetectorAruco
 {
 
 public:
