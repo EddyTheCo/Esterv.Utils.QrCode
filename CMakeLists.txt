@@ -33,7 +33,7 @@ install(EXPORT ${PROJECT_NAME}-config
 	FILE ${PROJECT_NAME}-config.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
 	NAMESPACE ${PROJECT_NAME}::
-	COMPONENT All
+	COMPONENT ${PROJECT_NAME}
 	)
 include(CMakePackageConfigHelpers)
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
