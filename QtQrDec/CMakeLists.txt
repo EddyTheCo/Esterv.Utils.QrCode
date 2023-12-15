@@ -54,9 +54,9 @@ else()
     target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
 endif(EMSCRIPTEN)
 target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec
-    EstervDesigns::SimpleStyle EstervDesigns::customControls
+    EstervDesigns::SimpleStyle EstervDesigns::CustomControls
     $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
-    $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>)
+    $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::CustomControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::CustomControlsplugin>)
 
 install(TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
     EXPORT ${PROJECT_NAME}-config
