@@ -1,6 +1,6 @@
 find_package(Qt6 COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Svg)
 
-if (Qt6_FOUND)
+if (Qt6_FOUND AND TARGET QrGen)
     qt_standard_project_setup()
     qt6_add_qml_module(QtQrGen
         URI  Esterv.CustomControls.QrGen
@@ -73,4 +73,4 @@ install(TARGETS QtQrGenplugin
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_subdirectory(examples)
 endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-endif(Qt6_FOUND)
+endif(Qt6_FOUND AND TARGET QrGen)
