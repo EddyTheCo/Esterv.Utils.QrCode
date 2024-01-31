@@ -27,7 +27,7 @@ Text
 
     Rectangle {
         id:qricon
-        height:Math.min(parent.height,font.pixelSize)
+        height:Math.min(parent.height,control.font.pixelSize)
         width:height
         x: parent.contentWidth
         color: "transparent"

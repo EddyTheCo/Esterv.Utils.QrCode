@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls
-import QtQuick.Layouts
 import Esterv.Styles.Simple
 import Esterv.CustomControls.QrDec
 
@@ -24,7 +23,7 @@ TextField
 
     Rectangle {
         id:qricon
-        height:Math.min(parent.height,font.pixelSize)
+        height:Math.min(parent.height,control.font.pixelSize)
         width:height
         anchors.right: parent.right
         anchors.verticalCenter: control.verticalCenter

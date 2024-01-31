@@ -7,7 +7,7 @@ import Esterv.Styles.Simple
 Popup {
     id: control
     required property string textData;
-    property bool showClose:true;
+    property bool showClose:false;
 
     ColumnLayout
     {
@@ -57,6 +57,7 @@ Popup {
             }
             visible:showdata.checked
         }
+
         QrGenImage
         {
             id:qrgenimage
@@ -64,6 +65,7 @@ Popup {
             visible:!tex.visible
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.margins: 0
         }
 
     }
