@@ -2,7 +2,7 @@ name: build-docs
 run-name: ${{ github.actor }} ${{ github.event_name }} to ${{ github.base_ref }} 
 on:
    push:
-    tags:
+   tags:
       - 'v*'
 jobs:
   build_doxygen:
