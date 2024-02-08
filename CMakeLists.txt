@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
-
+cmake_minimum_required(VERSION 3.24)
+option(BUILD_QRDEC "Build Decoding part" ON)
+option(BUILD_QRENC "Build Encoding part" ON)
 include(${CMAKE_CURRENT_BINARY_DIR}/local_conf.cmake OPTIONAL)
 
 include(FetchContent)
@@ -22,23 +23,26 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
 
-add_subdirectory(QrDec)
-add_subdirectory(QrGen)
+if(BUILD_QRDEC)
+    add_subdirectory(QrDec)
+endif(BUILD_QRDEC)
+if(BUILD_QRENC)
+    add_subdirectory(QrGen)
+endif(BUILD_QRENC)
 add_subdirectory(QtQrDec)
 add_subdirectory(QtQrGen)
 
 
 
 install(EXPORT ${PROJECT_NAME}-config
-	FILE ${PROJECT_NAME}-config.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	NAMESPACE ${PROJECT_NAME}::
 	COMPONENT ${PROJECT_NAME}
 	)
 include(CMakePackageConfigHelpers)
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	)
 write_basic_package_version_file(
 	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
@@ -48,7 +52,7 @@ write_basic_package_version_file(
 install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
 	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	)
 export(EXPORT ${PROJECT_NAME}-config
 	FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
