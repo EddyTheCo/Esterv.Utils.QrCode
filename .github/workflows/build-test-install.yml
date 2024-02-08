@@ -13,12 +13,11 @@ jobs:
       matrix:
         os: [ubuntu-latest,macos-latest,windows-latest]
 
-    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.1.1
+    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.1.2
     permissions:
       contents: write
     with:
       os: ${{ matrix.os }}
-      sharedLib: true
       qtVersion: '6.6.0'
       qtModules: 'qtshadertools qtmultimedia' 
       test: false
@@ -32,14 +31,11 @@ jobs:
 
     steps:
           
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
     
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
            path: artifacts
-      - name: Display structure of downloaded files
-        run: ls -R
-          
       - name: Releases 
         uses: softprops/action-gh-release@v1
         with:
