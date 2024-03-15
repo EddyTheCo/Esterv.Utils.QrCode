@@ -20,6 +20,8 @@ if (Qt6_FOUND AND TARGET QrGen)
 
 add_library(${PROJECT_NAME}::QtQrGen ALIAS QtQrGen)
 add_library(${PROJECT_NAME}::QtQrGenplugin ALIAS QtQrGenplugin)
+target_compile_definitions(QtQrGen PRIVATE WINDOWS_GEN)
+
 qt6_add_shaders(QtQrGen "esterVtech.com.imports.QtQrGen.shaders"
     BATCHABLE
     PRECOMPILE
@@ -36,8 +38,8 @@ target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOUR
 if(NOT TARGET Qt6::Svg)
     FetchContent_Declare(
         qtsvg
-        GIT_REPOSITORY git://code.qt.io/qt/qtsvg.git
-        GIT_TAG 6.5.0
+        GIT_REPOSITORY https://github.com/qt/qtsvg.git
+        GIT_TAG 6.6.0
     )
 FetchContent_MakeAvailable(qtsvg)
 endif()
