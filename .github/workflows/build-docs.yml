@@ -6,7 +6,7 @@ on:
          - 'v*'
 jobs:
   build_doxygen:
-    uses: EddyTheCo/Common/.github/workflows/build-docs.yml@v0.1.2
+    uses: EddyTheCo/Common/.github/workflows/build-docs.yml@develop
     permissions:
       pages: write
       id-token: write
