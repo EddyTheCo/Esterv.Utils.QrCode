@@ -34,7 +34,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 
 add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
 add_library(${PROJECT_NAME}::QtQrDecplugin ALIAS QtQrDecplugin)
-
+target_compile_definitions(QtQrDec PRIVATE WINDOWS_DEC)
 
 qt6_add_shaders(QtQrDec "esterVtech.com.imports.QtQrDec.shaders"
     BATCHABLE
