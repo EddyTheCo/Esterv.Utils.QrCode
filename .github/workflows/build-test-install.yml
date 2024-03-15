@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest,macos-latest,windows-latest]
 
-    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.1.2
+    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@develop
     permissions:
       contents: write
     with:

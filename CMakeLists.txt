@@ -7,7 +7,7 @@ include(FetchContent)
 FetchContent_Declare(
 	ccommon
 	GIT_REPOSITORY https://github.com/EddyTheCo/Common.git
-	GIT_TAG main
+	GIT_TAG develop
 	)
 FetchContent_MakeAvailable(ccommon)
 version_from_git(
@@ -68,6 +68,5 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	include(CPack)
 endif()
 if(BUILD_DOCS)
-	get_target_property(build_docs cmake_build_docs SOURCES)
-	include(${build_docs})
+	build_docs()
 endif()
