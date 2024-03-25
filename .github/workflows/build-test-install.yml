@@ -2,7 +2,6 @@ name: push-build-release
 run-name: ${{ github.actor }} ${{ github.event_name }} to ${{ github.base_ref }} 
 on: 
 
-      test: false
   push:
     tags:
       - 'v*'
@@ -20,6 +19,7 @@ jobs:
       qtVersion: '6.6.0'
       cmakeArgs: "-DCPACK_PACKAGE_CONTACT=estervtech@gmail.com -DREPO_URL=https://eddytheco.github.io/qrCode -DCPACK_PACKAGE_VENDOR=estervtech"  
       qtModules: 'qtshadertools qtmultimedia' 
+      test: false
   
   build_doxygen:
     if: startsWith(github.ref, 'refs/tags/v')
