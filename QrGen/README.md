@@ -8,8 +8,8 @@ include(FetchContent)
 FetchContent_Declare(
 	qrCode
 	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-	GIT_TAG v1.0.0 
-	FIND_PACKAGE_ARGS 1.0 COMPONENTS QrGen CONFIG  
+	GIT_TAG vMAJOR.MINOR.PATCH 
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QrGen CONFIG  
 )
 FetchContent_MakeAvailable(qrCode)
 
