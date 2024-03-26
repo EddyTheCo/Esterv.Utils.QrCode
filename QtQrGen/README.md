@@ -1,5 +1,7 @@
 # QtQrGen
 
+[TOC]
+
 This code produce a QML module with custom types and a custom ImageProvider of Qt.
 The custom types are related to the generation and showing of QRCODEs.
 

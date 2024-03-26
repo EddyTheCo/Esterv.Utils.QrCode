@@ -1,5 +1,7 @@
 # QrGen
 
+[TOC]
+
 The code is based on [QR Code generator library](https://github.com/nayuki/QR-Code-generator) and produce a library for the generation of a QR code of certain data.
 
 ## Adding the libraries to your CMake project 

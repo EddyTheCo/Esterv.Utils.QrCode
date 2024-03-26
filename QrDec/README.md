@@ -1,5 +1,7 @@
 # QrDec
 
+[TOC]
+
 This repo detect and decode a Qr code in a image.
 The detection and decoding is performed by [OpenCV](https://opencv.org/) libraries.
 In case OpenCV is not found on your system CMake will download pre compiled libraries from [my action releases](https://github.com/EddyTheCo/install-OpenCV-action).
