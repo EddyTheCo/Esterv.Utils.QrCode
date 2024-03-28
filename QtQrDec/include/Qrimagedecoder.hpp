@@ -17,7 +17,15 @@
 #include <qrcodedec.hpp>
 
 
-class QRImageDecoder : public QObject
+#include <QtCore/QtGlobal>
+#if defined(WINDOWS_DEC)
+# define DEC_EXPORT Q_DECL_EXPORT
+#else
+#define DEC_EXPORT Q_DECL_IMPORT
+#endif
+
+
+class DEC_EXPORT QRImageDecoder : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString source READ get_source NOTIFY sourceChanged)
@@ -66,7 +74,7 @@ private:
 };
 
 
-class WasmImageProvider : public QQuickImageProvider
+class DEC_EXPORT WasmImageProvider : public QQuickImageProvider
 {
 public:
     WasmImageProvider():QQuickImageProvider(QQuickImageProvider::Image)

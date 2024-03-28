@@ -1,5 +1,7 @@
 # QtQrDec
 
+[TOC] 
+
 This repo produce a QML Module with custom types that can detect and decode QRCODEs.
 
 The types should be style independent, but the colors used relies on the [EstervDesigns](https://github.com/EddyTheCo/MyDesigns)
@@ -37,8 +39,8 @@ include(FetchContent)
 FetchContent_Declare(
 	qrCode
 	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-	GIT_TAG v1.0.0 
-	FIND_PACKAGE_ARGS 1.0 COMPONENTS QtQrDec CONFIG  
+	GIT_TAG vMAJOR.MINOR.PATCH 
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QtQrDec CONFIG  
 )
 FetchContent_MakeAvailable(qrCode)
 

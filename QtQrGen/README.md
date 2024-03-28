@@ -1,5 +1,7 @@
 # QtQrGen
 
+[TOC]
+
 This code produce a QML module with custom types and a custom ImageProvider of Qt.
 The custom types are related to the generation and showing of QRCODEs.
 
@@ -34,8 +36,8 @@ include(FetchContent)
 FetchContent_Declare(
 	qrCode
 	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-	GIT_TAG v1.0.0 
-	FIND_PACKAGE_ARGS 1.0 COMPONENTS QtQrGen CONFIG  
+	GIT_TAG vMAJOR.MINOR.PATCH 
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QtQrGen CONFIG  
 )
 FetchContent_MakeAvailable(qrCode)
 
