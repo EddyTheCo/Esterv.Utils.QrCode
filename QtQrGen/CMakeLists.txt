@@ -4,8 +4,8 @@ if (Qt6_FOUND AND TARGET QrGen)
 	FetchContent_Declare(
 		EstervDesigns
 		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-		GIT_TAG develop
-		FIND_PACKAGE_ARGS 1.1 COMPONENTS SimpleStyle CustomControls CONFIG
+		GIT_TAG 1.2.0
+		FIND_PACKAGE_ARGS 1.2 COMPONENTS SimpleStyle CustomControls CONFIG
 		)
 	FetchContent_MakeAvailable(EstervDesigns)
 	qt_standard_project_setup()
@@ -22,7 +22,7 @@ if (Qt6_FOUND AND TARGET QrGen)
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
 		${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrGen
-		IMPORT_PATH ${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_LIBDIR}
+		IMPORT_PATH ${CMAKE_BINARY_DIR} 
 		)
 
 	add_library(${PROJECT_NAME}::QtQrGen ALIAS QtQrGen)

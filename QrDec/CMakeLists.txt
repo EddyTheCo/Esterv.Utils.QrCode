@@ -61,7 +61,7 @@ if(OpenCV_FOUND)
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
-		COMPONENT QrDec
+		COMPONENT  ${PROJECT_NAME}
 		)
 else()
 	message(STATUS "The QRCODE decoding library will not be built")
