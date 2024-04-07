@@ -1,8 +1,8 @@
 
-if(NOT EMSCRIPTEN)
-        find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools Multimedia)
+if(EMSCRIPTEN)
+        find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools)
 else()
-        find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools )
+        find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools Multimedia)
 endif(EMSCRIPTEN)
 
 
