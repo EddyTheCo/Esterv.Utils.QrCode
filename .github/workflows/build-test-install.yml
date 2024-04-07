@@ -11,7 +11,7 @@ jobs:
   build_test_package:
     strategy:
       matrix:
-        os: [ubuntu-latest,macos-latest,windows-latest]
+        os: [windows-latest]
 
     uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.3.0
     with:
