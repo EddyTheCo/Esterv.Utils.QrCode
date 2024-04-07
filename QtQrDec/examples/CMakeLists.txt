@@ -21,7 +21,7 @@ if(BUILD_EXAMPLES)
                     if(NOT EMSCRIPTEN)
                         target_link_libraries(${example} PRIVATE Qt6::Multimedia)
                     endif(NOT EMSCRIPTEN)
-                target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick $<TARGET_NAME_IF_EXISTS:Qt6::Multimedia> QtQrDec
+                target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick  QtQrDec
                         $<$<STREQUAL:$<TARGET_PROPERTY:QtQrDec,TYPE>,STATIC_LIBRARY>:QtQrDecplugin>
 			)
 
