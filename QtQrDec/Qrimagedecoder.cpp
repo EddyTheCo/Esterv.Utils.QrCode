@@ -89,16 +89,6 @@ void QRImageDecoder::getCamera(void)
             }
         }
         m_camera=new QCamera(best,this);
-        auto bvF=best.videoFormats().at(0);
-        for (const QCameraFormat &format : best.videoFormats())
-        {
-            if(abs(format.resolution().width()*1.0-format.resolution().height())<abs(bvF.resolution().width()*1.0-bvF.resolution().height()))
-            {
-                bvF=format;
-            }
-        }
-        m_camera->setCameraFormat(bvF);
-
     }
 
 }
