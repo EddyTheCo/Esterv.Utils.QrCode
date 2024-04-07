@@ -11,12 +11,12 @@ jobs:
   build_test_package:
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest,macos-latest,windows-latest]
 
     uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.3.0
     with:
       os: ${{ matrix.os }}
-      qtVersion: '6.6.0'
+      qtVersion: '6.7.0'
       cmakeArgs: "-DQTDEPLOY=ON -DBUILD_EXAMPLES=ON -DCPACK_PACKAGE_CONTACT=estervtech@gmail.com -DREPO_URL=https://eddytheco.github.io/qrCode -DCPACK_PACKAGE_VENDOR=estervtech"  
       qtModules: 'qtshadertools qtmultimedia' 
       test: false
