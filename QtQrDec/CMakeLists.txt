@@ -1,8 +1,8 @@
 
 if(EMSCRIPTEN)
-	find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools)
+        find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools)
 else()
-	find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools Multimedia)
+        find_package(Qt6 COMPONENTS Core Gui Qml Quick ShaderTools Multimedia)
 endif(EMSCRIPTEN)
 
 
@@ -11,7 +11,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 	FetchContent_Declare(
 		EstervDesigns
 		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-		GIT_TAG v1.2.0
+		GIT_TAG develop
 		FIND_PACKAGE_ARGS 1.2 COMPONENTS SimpleStyle CustomControls CONFIG
 		)
 	FetchContent_MakeAvailable(EstervDesigns)
@@ -29,7 +29,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
 		${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
-		IMPORT_PATH ${CMAKE_BINARY_DIR} 
+		IMPORT_PATH ${CMAKE_BINARY_DIR}
 		)
 
 	add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
@@ -63,6 +63,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT QtQrDec
+                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrDec
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
@@ -77,6 +78,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrDec
 		COMPONENT QtQrDec
+                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrDec
 		)
 
 	if(EMSCRIPTEN)

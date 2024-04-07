@@ -1,4 +1,5 @@
 if(BUILD_EXAMPLES)
+        include(InstallRequiredSystemLibraries)
 	if(EMSCRIPTEN OR ANDROID)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS FlatControl CONFIG )
@@ -20,7 +21,7 @@ if(BUILD_EXAMPLES)
                     if(NOT EMSCRIPTEN)
                         target_link_libraries(${example} PRIVATE Qt6::Multimedia)
                     endif(NOT EMSCRIPTEN)
-                target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick $<TARGET_NAME_IF_EXISTS:Qt6::Multimedia> QtQrDec
+                target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick  QtQrDec
                         $<$<STREQUAL:$<TARGET_PROPERTY:QtQrDec,TYPE>,STATIC_LIBRARY>:QtQrDecplugin>
 			)
 
@@ -37,6 +38,7 @@ if(BUILD_EXAMPLES)
 			qt_generate_deploy_qml_app_script(
 				TARGET ${example}
 				OUTPUT_SCRIPT deploy_script
+                                # DEPLOY_TOOL_OPTIONS -multimedia #Qt> 6.7.0 only for windows
 				)
 			install(SCRIPT ${deploy_script} COMPONENT examples)
 		endif(QTDEPLOY)

@@ -23,6 +23,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
 
+
 if(BUILD_QRDEC)
 	add_subdirectory(QrDec)
 endif(BUILD_QRDEC)
