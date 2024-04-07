@@ -38,7 +38,7 @@ if(BUILD_EXAMPLES)
 			qt_generate_deploy_qml_app_script(
 				TARGET ${example}
 				OUTPUT_SCRIPT deploy_script
-                                DEPLOY_TOOL_OPTIONS -multimedia
+                                # DEPLOY_TOOL_OPTIONS -multimedia #Qt> 6.7.0 only for windows
 				)
 			install(SCRIPT ${deploy_script} COMPONENT examples)
 		endif(QTDEPLOY)
