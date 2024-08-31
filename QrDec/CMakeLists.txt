@@ -48,7 +48,7 @@ endif()
 if(OpenCV_FOUND)
 	add_library(QrDec qrcodedec.cpp)
 
-	add_library(${PROJECT_NAME}::QrDec ALIAS QrDec)
+	add_library(Esterv::QrDec ALIAS QrDec)
 	set_target_properties(QrDec PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
 	target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${OpenCV_INCLUDE_DIRS}>)
 	target_link_libraries(QrDec PUBLIC ${OpenCV_LIBS})
@@ -58,13 +58,13 @@ if(OpenCV_FOUND)
 	install(TARGETS QrDec
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		COMPONENT QrDec
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QrDec
+		COMPONENT EstervQrDec
+		RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT EstervQrDec
 		)
-	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
-		COMPONENT  ${PROJECT_NAME}
-		)
+	install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
+    COMPONENT ${PROJECT_NAME}-dev)
 else()
 	message(STATUS "The QRCODE decoding library will not be built")
 endif(OpenCV_FOUND)

@@ -10,9 +10,9 @@ endif(EMSCRIPTEN)
 if (Qt6_FOUND AND TARGET QrDec)
 	FetchContent_Declare(
 		EstervDesigns
-		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+		GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Designs.git
 		GIT_TAG develop
-		FIND_PACKAGE_ARGS 1.2 COMPONENTS SimpleStyle CustomControls CONFIG
+		FIND_PACKAGE_ARGS 1.2 COMPONENTS EstervSimpleStyle EstervCustomControls CONFIG
 		)
 	FetchContent_MakeAvailable(EstervDesigns)
 	qt_standard_project_setup()
@@ -32,8 +32,8 @@ if (Qt6_FOUND AND TARGET QrDec)
 		IMPORT_PATH ${CMAKE_BINARY_DIR}
 		)
 
-	add_library(${PROJECT_NAME}::QtQrDec ALIAS QtQrDec)
-	add_library(${PROJECT_NAME}::QtQrDecplugin ALIAS QtQrDecplugin)
+	add_library(Esterv::QtQrDec ALIAS QtQrDec)
+	add_library(Esterv::QtQrDecplugin ALIAS QtQrDecplugin)
 	target_compile_definitions(QtQrDec PRIVATE WINDOWS_DEC)
 	set_target_properties(QtQrDec PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
 
@@ -55,30 +55,30 @@ if (Qt6_FOUND AND TARGET QrDec)
 		target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
 	endif(EMSCRIPTEN)
 	target_link_libraries(QtQrDec PUBLIC Qt6::Gui Qt6::Quick QrDec
-		EstervDesigns::SimpleStyle EstervDesigns::CustomControls
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::CustomControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::CustomControlsplugin>)
+		Esterv::SimpleStyle Esterv::CustomControls
+		$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::SimpleStyle,TYPE>,STATIC_LIBRARY>:Designs::SimpleStyleplugin>
+		$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::CustomControls,TYPE>,STATIC_LIBRARY>:Designs::CustomControlsplugin>)
 
 	install(TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		COMPONENT QtQrDec
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrDec
+		COMPONENT EstervQtQrDec
+		RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT EstervQtQrDec
 		)
-	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
-		COMPONENT QtQrDec
-		)
+	install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
+    COMPONENT ${PROJECT_NAME}-dev)
 	install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrDec
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls
-		COMPONENT QtQrDec
+		COMPONENT QtQrDec-qml
 		)
 
 	install(TARGETS QtQrDecplugin
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrDec
-		COMPONENT QtQrDec
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrDec
+		COMPONENT QtQrDec-qml
+                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrDec-qml
 		)
 
 	if(EMSCRIPTEN)

@@ -3,9 +3,9 @@ find_package(Qt6 COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Svg)
 if (Qt6_FOUND AND TARGET QrGen)
 	FetchContent_Declare(
 		EstervDesigns
-		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+		GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Designs.git
 		GIT_TAG develop
-		FIND_PACKAGE_ARGS 1.2 COMPONENTS SimpleStyle CustomControls CONFIG
+		FIND_PACKAGE_ARGS 1.2 COMPONENTS EstervSimpleStyle EstervCustomControls CONFIG
 		)
 	FetchContent_MakeAvailable(EstervDesigns)
 	qt_standard_project_setup()
@@ -25,8 +25,8 @@ if (Qt6_FOUND AND TARGET QrGen)
 		IMPORT_PATH ${CMAKE_BINARY_DIR} 
 		)
 
-	add_library(${PROJECT_NAME}::QtQrGen ALIAS QtQrGen)
-	add_library(${PROJECT_NAME}::QtQrGenplugin ALIAS QtQrGenplugin)
+	add_library(Esterv::QtQrGen ALIAS QtQrGen)
+	add_library(Esterv::QtQrGenplugin ALIAS QtQrGenplugin)
 	set_target_properties(QtQrGen PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
 	target_compile_definitions(QtQrGen PRIVATE WINDOWS_GEN)
 
@@ -57,9 +57,9 @@ if (Qt6_FOUND AND TARGET QrGen)
 		Qt6::Quick
 		)
 	target_link_libraries(QtQrGen PRIVATE QrGen Qt6::Core Qt6::Gui Qt6::Qml Qt6::Svg
-		EstervDesigns::SimpleStyle EstervDesigns::CustomControls
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::CustomControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::CustomControlsplugin>)
+		Esterv::SimpleStyle Esterv::CustomControls
+		$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::SimpleStyle,TYPE>,STATIC_LIBRARY>:Esterv::SimpleStyleplugin>
+		$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::CustomControls,TYPE>,STATIC_LIBRARY>:Esterv::CustomControlsplugin>)
 
 	install(TARGETS QtQrGen ${out_targets_var} ${out_targets_var2}
 		EXPORT ${PROJECT_NAME}-config
@@ -69,18 +69,18 @@ if (Qt6_FOUND AND TARGET QrGen)
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
-		COMPONENT QtQrGen
+		COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrGen
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls
-		COMPONENT QtQrGen
+		COMPONENT QtQrGen-qml
 		)
 
 	install(TARGETS QtQrGenplugin
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrGen
-		COMPONENT QtQrGen
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrGen
+		COMPONENT QtQrGen-qml
+                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrGen-qml
 		)
 	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		add_subdirectory(examples)
