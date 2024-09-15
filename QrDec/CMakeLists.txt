@@ -1,6 +1,5 @@
-find_package(OpenCV COMPONENTS core objdetect imgproc flann features2d calib3d )
+find_package(OpenCV COMPONENTS core objdetect imgproc flann features2d calib3d)
 
-option(OpenCV_DOWNLOAD "On or off" ON)
 if(NOT OpenCV_FOUND AND OpenCV_DOWNLOAD)
 	set(builturl "https://github.com/EddyTheCo/install-OpenCV-action/releases/latest/download/OpenCV-ubuntu-latest-wasm_false-android_none.tar")
 	if(WIN32)
@@ -37,8 +36,9 @@ if(NOT OpenCV_FOUND AND OpenCV_DOWNLOAD)
 	if(OpenCV_FOUND AND NOT ANDROID AND NOT EMSCRIPTEN)
 		install(IMPORTED_RUNTIME_ARTIFACTS ${OpenCV_LIBS}
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}
-                        COMPONENT OpenCVDep
-                        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT OpenCVDep
+                        COMPONENT OpenCV-dep
+                        RUNTIME COMPONENT OpenCV-dep
+                        ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 			)
 	endif()
 endif()
@@ -46,24 +46,24 @@ endif()
 
 
 if(OpenCV_FOUND)
-	add_library(QrDec qrcodedec.cpp)
+	add_library(qrDec src/qrcodedec.cpp)
 
-	add_library(Esterv::QrDec ALIAS QrDec)
-	set_target_properties(QrDec PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
-	target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${OpenCV_INCLUDE_DIRS}>)
-	target_link_libraries(QrDec PUBLIC ${OpenCV_LIBS})
+	add_library(Esterv::qrDec ALIAS qrDec)
+	set_target_properties(qrDec PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
+	target_include_directories(qrDec PUBLIC $<BUILD_INTERFACE:${OpenCV_INCLUDE_DIRS}>)
+	target_link_libraries(qrDec PUBLIC ${OpenCV_LIBS})
 
-	target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/>")
-	install(TARGETS QrDec
+	target_include_directories(qrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+	install(TARGETS qrDec
 		EXPORT ${PROJECT_NAME}-config
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT EstervQrDec
-		RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT EstervQrDec
+		RUNTIME COMPONENT EstervQrDec
+                ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT ${PROJECT_NAME}-dev)
 else()
 	message(STATUS "The QRCODE decoding library will not be built")

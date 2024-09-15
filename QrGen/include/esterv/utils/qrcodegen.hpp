@@ -31,7 +31,7 @@
 #include <climits>
 #include <sstream>
 
-namespace qrcodegen {
+namespace Esterv::Utils::QrGen {
 
 	/*
 	 * A segment of character/binary/control data in a QR Code symbol.

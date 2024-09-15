@@ -1,4 +1,4 @@
-# qrCode
+# Esterv.Utils.QRCODE 
 
 [TOC]
 
@@ -20,7 +20,7 @@ FetchContent_Declare(
 	)
 FetchContent_MakeAvailable(EstervQrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrGen qrCode::QtQrGen qrCode::QrDec qrCode::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> Esterv::QrGen Esterv::QtQrGen Esterv::QrDec Esterv::QtQrDec)
 ```
 For more information check
 

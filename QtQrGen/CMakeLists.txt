@@ -47,7 +47,7 @@ if (Qt6_FOUND AND TARGET QrGen)
 		FetchContent_Declare(
 			qtsvg
 			GIT_REPOSITORY https://github.com/qt/qtsvg.git
-			GIT_TAG 6.6.0
+			GIT_TAG 6.7.0
 			)
 		FetchContent_MakeAvailable(qtsvg)
 	endif()
@@ -64,23 +64,23 @@ if (Qt6_FOUND AND TARGET QrGen)
 	install(TARGETS QtQrGen ${out_targets_var} ${out_targets_var2}
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		COMPONENT QtQrGen
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrGen
+		COMPONENT EstervQtQrGen
+    ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 		COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrGen
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls
-		COMPONENT QtQrGen-qml
+		COMPONENT EstervQtQrGen-qml
 		)
 
 	install(TARGETS QtQrGenplugin
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrGen
-		COMPONENT QtQrGen-qml
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrGen-qml
+		COMPONENT EstervQtQrGen-qml
+    ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 		)
 	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		add_subdirectory(examples)

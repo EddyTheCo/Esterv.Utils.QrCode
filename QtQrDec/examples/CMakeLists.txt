@@ -35,10 +35,13 @@ if(BUILD_EXAMPLES)
 			COMPONENT ${PROJECT_NAME}-examples
 			)
 		if(QTDEPLOY)
+			if(WIN32)
+			set(deploy_tools_options -multimedia)
+		endif(WIN32)
 			qt_generate_deploy_qml_app_script(
 				TARGET ${example}
 				OUTPUT_SCRIPT deploy_script
-                                # DEPLOY_TOOL_OPTIONS -multimedia #Qt> 6.7.0 only for windows
+                                DEPLOY_TOOL_OPTIONS ${deploy_tools_options} #Qt> 6.7.0 only for windows
 				)
 			install(SCRIPT ${deploy_script} COMPONENT ${PROJECT_NAME}-examples)
 		endif(QTDEPLOY)

@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.24)
+
 option(BUILD_QRDEC "Build Decoding part" ON)
 option(BUILD_QRENC "Build Encoding part" ON)
+option(OpenCV_DOWNLOAD "Download prebuilts if find_package fails" ON)
+
 include(${CMAKE_CURRENT_BINARY_DIR}/local_conf.cmake OPTIONAL)
 
 include(FetchContent)
 FetchContent_Declare(
 	ccommon
 	GIT_REPOSITORY https://github.com/EddyTheCo/Common.git
-	GIT_TAG v0.4.1
+	GIT_TAG ndk26
 	)
 FetchContent_MakeAvailable(ccommon)
 version_from_git(
@@ -30,6 +33,7 @@ endif(BUILD_QRDEC)
 if(BUILD_QRENC)
 	add_subdirectory(QrGen)
 endif(BUILD_QRENC)
+
 add_subdirectory(QtQrDec)
 add_subdirectory(QtQrGen)
 
@@ -41,4 +45,4 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 if(BUILD_DOCS)
 	build_docs()
-endif()
+endif(BUILD_DOCS)
