@@ -1,10 +1,10 @@
-# QtQrDec
+# Esterv.CustomControls.QrDec
 
 [TOC] 
 
 This repo produce a QML Module with custom types that can detect and decode QRCODEs.
 
-The types should be style independent, but the colors used relies on the [EstervDesigns](https://github.com/EddyTheCo/MyDesigns)
+The types should be style independent, but the colors used relies on the [EstervDesigns](https://github.com/EddyTheCo/Esterv.Designs)
 Simple style. 
 If you want to change the colors in your top qml file one can do
 ```
@@ -13,7 +13,7 @@ import Esterv.Styles.Simple
 
 Component.onCompleted:
 {
-Style.frontColor1= (Style.theme)?LightThemeColor:DarkThemeColor//Like control.palette.text
+Style.frontColor1= (Style.theme)?LightThemeColor:DarkThemeColor //Like control.palette.text
 
 Style.frontColor2= ... 
 Style.frontColor3= ... 
@@ -34,17 +34,19 @@ You can play with the decoder on [this page](https://eddytheco.github.io/qmlonli
  
 
 ## Adding the module to your CMake project 
+
 ```
 include(FetchContent)
 FetchContent_Declare(
-	qrCode
-	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	EstervQrCode
+	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
 	GIT_TAG vMAJOR.MINOR.PATCH 
-	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QtQrDec CONFIG  
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS EstervQtQrDec EstervQtQrDec-dev EstervQtQrDec-qml CONFIG  
 )
-FetchContent_MakeAvailable(qrCode)
+FetchContent_MakeAvailable(EstervQrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> Esterv::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> $<$<STREQUAL:$<TARGET_PROPERTY:Esterv::QtQrDec,TYPE>,STATIC_LIBRARY>:Esterv::QtQrDecplugin>)
 ```
 
 

@@ -9,7 +9,7 @@
       "binaryDir": "${sourceDir}/build/release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-	"REPO_URL":"https://eddytheco.github.io/Esterv.CustomControls.QrDec"
+	"REPO_URL":"https://eddytheco.github.io/Esterv.Utils.QrCode"
       }
     },
     {
@@ -147,7 +147,7 @@
       "inherits":"default-release",
       "configurePreset": "default-develop",
       "variables": {
-	      "CPACK_COMPONENTS_ALL": "EstervUpdater;EstervUpdater-dev;EstervUpdater-examples;EstervUpdater-qml"
+	      "CPACK_COMPONENTS_ALL": "EstervQrGen;EstervQrGen-dev;EstervQrDec;EstervQrDec-dev;EstervQtQrGen;EstervQtQrGen-dev;EstervQtQrDec;EstervQtQrDec-dev;EstervQtQrGen-qml;EstervQtQrDec-qml; "
       }
     }
   ]

@@ -12,14 +12,14 @@ if (Qt6_FOUND AND TARGET QrDec)
 		EstervDesigns
 		GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Designs.git
 		GIT_TAG develop
-		FIND_PACKAGE_ARGS 1.2 COMPONENTS EstervSimpleStyle EstervCustomControls CONFIG
+		FIND_PACKAGE_ARGS 1.2 COMPONENTS EstervSimpleStyle EstervSimpleStyle-dev EstervCustomControls EstervCustomControls-dev CONFIG
 		)
 	FetchContent_MakeAvailable(EstervDesigns)
 	qt_standard_project_setup()
 	qt6_add_qml_module(QtQrDec
 		URI  Esterv.CustomControls.QrDec
 		VERSION 1.0
-		SOURCES src/rimagedecoder.cpp include/esterv/utils/qrimagedecoder.hpp
+		SOURCES src/qr_image_decoder.cpp include/esterv/utils/qr_image_decoder.hpp
 		QML_FILES
 		"qml/QrCam.qml"
 		"qml/QrDecPop.qml"
@@ -58,6 +58,7 @@ if (Qt6_FOUND AND TARGET QrDec)
 		)
 	target_include_directories(QtQrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+	target_include_directories(QtQrDec PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/esterv/utils)
 	if(EMSCRIPTEN)
 		target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
 	else()
@@ -70,7 +71,6 @@ if (Qt6_FOUND AND TARGET QrDec)
 
 	install(TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
 		EXPORT ${PROJECT_NAME}-config
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT EstervQtQrDec
 		)
 	install(

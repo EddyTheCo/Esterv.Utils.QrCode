@@ -38,7 +38,6 @@ if(NOT OpenCV_FOUND AND OpenCV_DOWNLOAD)
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}
                         COMPONENT OpenCV-dep
                         RUNTIME COMPONENT OpenCV-dep
-                        ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 			)
 	endif()
 endif()
@@ -46,19 +45,18 @@ endif()
 
 
 if(OpenCV_FOUND)
-	add_library(qrDec src/qrcodedec.cpp)
+	add_library(QrDec src/qrcode_dec.cpp)
 
-	add_library(Esterv::qrDec ALIAS qrDec)
-	set_target_properties(qrDec PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
-	target_include_directories(qrDec PUBLIC $<BUILD_INTERFACE:${OpenCV_INCLUDE_DIRS}>)
-	target_link_libraries(qrDec PUBLIC ${OpenCV_LIBS})
+	add_library(Esterv::QrDec ALIAS QrDec)
+	set_target_properties(QrDec PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
+	target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${OpenCV_INCLUDE_DIRS}>)
+	target_link_libraries(QrDec PUBLIC ${OpenCV_LIBS})
 
-	target_include_directories(qrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	target_include_directories(QrDec PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-	install(TARGETS qrDec
+	install(TARGETS QrDec
 		EXPORT ${PROJECT_NAME}-config
 		COMPONENT EstervQrDec
-		RUNTIME COMPONENT EstervQrDec
                 ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(

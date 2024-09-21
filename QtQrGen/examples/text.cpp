@@ -1,9 +1,12 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "Qrimageprovider.hpp"
+#include "esterv/utils/qr_image_provider.hpp"
 #if defined(FORCE_STYLE)
 #include <QQuickStyle>
 #endif
+
+using namespace Esterv::Utils::QrGen;
+
 int main(int argc, char *argv[])
 {
 	QGuiApplication app(argc, argv);

@@ -1,4 +1,4 @@
-# Esterv.Utils.QRCODE 
+# Esterv.Utils.QrCode 
 
 [TOC]
 
@@ -14,7 +14,7 @@ The GUI part will be based on Qt libraries and QML. Examples of this library com
 include(FetchContent)
 FetchContent_Declare(
 	EstervQrCode
-	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
 	GIT_TAG vMAJOR.MINOR.PATCH 
 	FIND_PACKAGE_ARGS MAJOR.MINOR CONFIG  
 	)

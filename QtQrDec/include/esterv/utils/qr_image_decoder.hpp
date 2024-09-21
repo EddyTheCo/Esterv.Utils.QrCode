@@ -11,10 +11,9 @@
 #include <QCamera>
 #include <QMediaCaptureSession>
 #include <QVideoSink>
-#include <thread>
 #endif
 
-#include <esterv/utils/qrcodedec.hpp>
+#include <esterv/utils/qrcode_dec.hpp>
 
 
 #if defined(QTQRDEC_SHARED)
