@@ -1,11 +1,8 @@
-#include "Qrimagedecoder.hpp"
-#include <QDebug>
-#include<QImage>
-#include <QQuickImageProvider>
+#include "esterv/utils/qr_image_decoder.hpp"
 #include <QGuiApplication>
-
-
-QRImageDecoder* QRImageDecoder::m_instance=nullptr;
+#include <QImage>
+#include <QQuickImageProvider>
+#include <thread>
 
 #ifdef USE_EMSCRIPTEN
 
@@ -14,9 +11,13 @@ QRImageDecoder* QRImageDecoder::m_instance=nullptr;
 
 
 EMSCRIPTEN_BINDINGS(qrdecoder) {
-    emscripten::class_<QRImageDecoder>("QRImageDecoder")
-        .function("reload", &QRImageDecoder::reload,emscripten::allow_raw_pointers())
-        .class_function("instance", &QRImageDecoder::instance, emscripten::allow_raw_pointers());
+    emscripten::class_<Esterv::Utils::QrDec::QRImageDecoder>("QRImageDecoder")
+        .function("reload",
+                  &Esterv::Utils::QrDec::QRImageDecoder::reload,
+                  emscripten::allow_raw_pointers())
+        .class_function("instance",
+                        &Esterv::Utils::QrDec::QRImageDecoder::instance,
+                        emscripten::allow_raw_pointers());
 }
 
 EM_JS(void, js_start, (), {
@@ -74,6 +75,9 @@ EM_JS(void, js_stop, (), {
 #if QT_CONFIG(permissions)
 #include <QPermission>
 #endif
+
+namespace Esterv::Utils::QrDec {
+QRImageDecoder *QRImageDecoder::m_instance = nullptr;
 
 void QRImageDecoder::getCamera(void)
 {
@@ -232,4 +236,4 @@ void QRImageDecoder::setid()
     emit sourceChanged();
     index++;
 }
-
+}

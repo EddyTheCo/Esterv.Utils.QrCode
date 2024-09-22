@@ -3,16 +3,16 @@ find_package(Qt6 COMPONENTS Core Gui Qml Quick OPTIONAL_COMPONENTS Svg)
 if (Qt6_FOUND AND TARGET QrGen)
 	FetchContent_Declare(
 		EstervDesigns
-		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+		GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Designs.git
 		GIT_TAG develop
-		FIND_PACKAGE_ARGS 1.2 COMPONENTS SimpleStyle CustomControls CONFIG
+		FIND_PACKAGE_ARGS 1.2 COMPONENTS EstervSimpleStyle EstervSimpleStyle-dev EstervCustomControls EstervCustomControls-dev CONFIG
 		)
 	FetchContent_MakeAvailable(EstervDesigns)
 	qt_standard_project_setup()
 	qt6_add_qml_module(QtQrGen
 		URI  Esterv.CustomControls.QrGen
 		VERSION ${VERSION}
-		SOURCES Qrimageprovider.cpp include/Qrimageprovider.hpp
+		SOURCES src/qr_image_provider.cpp include/esterv/utils/qr_image_provider.hpp
 		QML_FILES
 		"qml/QrGenImage.qml"
 		"qml/QrGenPop.qml"
@@ -25,10 +25,19 @@ if (Qt6_FOUND AND TARGET QrGen)
 		IMPORT_PATH ${CMAKE_BINARY_DIR} 
 		)
 
-	add_library(${PROJECT_NAME}::QtQrGen ALIAS QtQrGen)
-	add_library(${PROJECT_NAME}::QtQrGenplugin ALIAS QtQrGenplugin)
+	add_library(Esterv::QtQrGen ALIAS QtQrGen)
+	add_library(Esterv::QtQrGenplugin ALIAS QtQrGenplugin)
+  target_compile_definitions(
+    QtQrGen 
+    PUBLIC
+    $<IF:$<AND:$<BOOL:WIN32>,$<STREQUAL:$<TARGET_PROPERTY:QtQrGen,TYPE>,SHARED_LIBRARY>>,QTQRGEN_SHARED,>
+  )
+  target_compile_definitions(
+	  QtQrGen
+	  PRIVATE 
+	  WINDOWS_EXPORT
+  )
 	set_target_properties(QtQrGen PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
-	target_compile_definitions(QtQrGen PRIVATE WINDOWS_GEN)
 
 	qt6_add_shaders(QtQrGen "esterVtech.com.imports.QtQrGen.shaders"
 		BATCHABLE
@@ -43,11 +52,12 @@ if (Qt6_FOUND AND TARGET QrGen)
 
 	target_include_directories(QtQrGen PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/>")
+	target_include_directories(QtQrGen PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/esterv/utils)
 	if(NOT TARGET Qt6::Svg)
 		FetchContent_Declare(
 			qtsvg
 			GIT_REPOSITORY https://github.com/qt/qtsvg.git
-			GIT_TAG 6.6.0
+			GIT_TAG 6.7.0
 			)
 		FetchContent_MakeAvailable(qtsvg)
 	endif()
@@ -57,30 +67,29 @@ if (Qt6_FOUND AND TARGET QrGen)
 		Qt6::Quick
 		)
 	target_link_libraries(QtQrGen PRIVATE QrGen Qt6::Core Qt6::Gui Qt6::Qml Qt6::Svg
-		EstervDesigns::SimpleStyle EstervDesigns::CustomControls
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
-		$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::CustomControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::CustomControlsplugin>)
+		Esterv::SimpleStyle Esterv::CustomControls
+		$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::SimpleStyle,TYPE>,STATIC_LIBRARY>:Esterv::SimpleStyleplugin>
+		$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::CustomControls,TYPE>,STATIC_LIBRARY>:Esterv::CustomControlsplugin>)
 
 	install(TARGETS QtQrGen ${out_targets_var} ${out_targets_var2}
 		EXPORT ${PROJECT_NAME}-config
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		COMPONENT QtQrGen
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrGen
+		COMPONENT EstervQtQrGen
+    ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
-		COMPONENT QtQrGen
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+		COMPONENT ${PROJECT_NAME}-dev
 		)
 	install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/CustomControls/QrGen
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls
-		COMPONENT QtQrGen
+		COMPONENT EstervQtQrGen-qml
 		)
 
 	install(TARGETS QtQrGenplugin
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/CustomControls/QrGen
-		COMPONENT QtQrGen
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT QtQrGen
+		COMPONENT EstervQtQrGen-qml
+    ARCHIVE COMPONENT ${PROJECT_NAME}-dev
 		)
 	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		add_subdirectory(examples)

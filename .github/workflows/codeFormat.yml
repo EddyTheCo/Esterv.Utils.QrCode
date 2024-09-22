@@ -1,0 +1,16 @@
+name: codeFormat
+run-name: Format code and do PR
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [develop]
+jobs:
+  checkout-format-pr:
+    runs-on: ubuntu-latest
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.base_ref, 'develop')) }}
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    uses: EddyTheCo/Common/.github/workflows/codeFormat.yml@ndk26
+        

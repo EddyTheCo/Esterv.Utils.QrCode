@@ -29,7 +29,7 @@
 #include <cstring>
 #include <sstream>
 #include <utility>
-#include "qrcodegen.hpp"
+#include "esterv/utils/qrcode_gen.hpp"
 
 using std::int8_t;
 using std::uint8_t;
@@ -37,7 +37,7 @@ using std::size_t;
 using std::vector;
 
 
-namespace qrcodegen {
+namespace Esterv::Utils::QrGen {
 
 /*---- Class QrSegment ----*/
 

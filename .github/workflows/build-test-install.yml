@@ -13,23 +13,15 @@ jobs:
       matrix:
         os: [ubuntu-latest,macos-latest,windows-latest]
 
-    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.3.0
+    uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@ndk26
     with:
       os: ${{ matrix.os }}
-      qtVersion: '6.6.0'
-      cmakeArgs: "-DQTDEPLOY=ON -DBUILD_EXAMPLES=ON -DCPACK_PACKAGE_CONTACT=estervtech@gmail.com -DREPO_URL=https://eddytheco.github.io/qrCode -DCPACK_PACKAGE_VENDOR=estervtech"  
+      qtVersion: '6.7.0'
       qtModules: 'qtshadertools qtmultimedia' 
-      test: false
   
-  build_doxygen:
-    if: startsWith(github.ref, 'refs/tags/v')
-    uses: EddyTheCo/Common/.github/workflows/build-docs.yml@v0.3.0
-    with:
-      cmakeArgs: "-DBUILD_QRDEC=OFF -DBUILD_QRGEN=OFF"  
-
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build_test_package, build_doxygen]
+    needs: build_test_package
     runs-on: ubuntu-latest
 
     permissions:
@@ -48,13 +40,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
            path: artifacts
-      - name: Display structure of downloaded files
-        run: ls -R
 
       - name: Move repositories to webpage
         run: |
-          mv artifacts/docs/html github-pages
-          rm -rf artifacts/docs
+          mv artifacts/common/html github-pages
+          mv artifacts/common .
           mkdir github-pages/packages/ ${{runner.temp}}/platforms/
           mv artifacts/*/_CPack_Packages/* ${{runner.temp}}/platforms/
           for i in ${{runner.temp}}/platforms/*; do mv $i/IFW/*/repository/* $i/; rm -rf $i/IFW $i/TGZ; done;
@@ -68,13 +58,14 @@ jobs:
           cmake -E tar c ${{runner.temp}}/page-packages/github-pages.tar -- .
 
       - name: Releases 
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: ./artifacts/*/*   
+          files: ./artifacts/*/*
+          body_path: ./common/CHANGELOG.md
 
       - uses: actions/upload-artifact@v4
         with:
-          name: 'github-pages' 
+          name: 'github-pages'
           path:  ${{runner.temp}}/page-packages/*
 
       - name: Deploy to GitHub Pages

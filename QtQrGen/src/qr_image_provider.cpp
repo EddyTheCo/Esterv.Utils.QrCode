@@ -1,11 +1,10 @@
 #include <QPainter>
 #include <QSvgRenderer>
-#include "qrcodegen.hpp"
-#include "Qrimageprovider.hpp"
-#include <QDebug>
+#include "esterv/utils/qrcode_gen.hpp"
+#include "esterv/utils/qr_image_provider.hpp"
 
-using namespace qrcodegen;
 
+namespace Esterv::Utils::QrGen {
 QPixmap QRImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
 	const int width = 100;
@@ -30,4 +29,4 @@ QPixmap QRImageProvider::requestPixmap(const QString &id, QSize *size, const QSi
 	Painter.end();
 	return pixmap;
 }
-
+}

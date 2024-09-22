@@ -1,4 +1,6 @@
-#include<qrcodedec.hpp>
+#include<esterv/utils/qrcode_dec.hpp>
+
+namespace Esterv::Utils::QrDec{
 
 std::string QRDecoder::decode_grey(unsigned char* img,int rows ,int cols)
 {
@@ -11,5 +13,4 @@ std::string QRDecoder::decode_grey(unsigned char* img,int rows ,int cols)
     return detectAndDecode(greyImg);
 }
 
-
-
+}

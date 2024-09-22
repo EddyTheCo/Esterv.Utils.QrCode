@@ -1,4 +1,4 @@
-# qrCode
+# Esterv.Utils.QrCode 
 
 [TOC]
 
@@ -13,14 +13,14 @@ The GUI part will be based on Qt libraries and QML. Examples of this library com
 ```CMake
 include(FetchContent)
 FetchContent_Declare(
-	qrCode
-	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	EstervQrCode
+	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
 	GIT_TAG vMAJOR.MINOR.PATCH 
 	FIND_PACKAGE_ARGS MAJOR.MINOR CONFIG  
 	)
-FetchContent_MakeAvailable(qrCode)
+FetchContent_MakeAvailable(EstervQrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrGen qrCode::QtQrGen qrCode::QrDec qrCode::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> Esterv::QrGen Esterv::QtQrGen Esterv::QrDec Esterv::QtQrDec)
 ```
 For more information check
 

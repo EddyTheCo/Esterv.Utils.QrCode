@@ -1,5 +1,6 @@
-#include "qrcodegen.hpp"
-namespace qrcodegen {
+#include "esterv/utils/qrcode_gen.hpp"
+namespace Esterv::Utils::QrGen {
+
     std::string toSvgString(const QrCode &qr, std::string fill) {
 
 

@@ -2,7 +2,7 @@ if(BUILD_EXAMPLES)
         include(InstallRequiredSystemLibraries)
 	if(EMSCRIPTEN OR ANDROID)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS FlatControl CONFIG )
+		find_package(EstervDesigns 1.2 REQUIRED COMPONENTS EstervFlatControl EstervFlatControl-dev CONFIG )
 	endif(EMSCRIPTEN OR ANDROID)
 
         foreach(example "image" "text"
@@ -26,8 +26,8 @@ if(BUILD_EXAMPLES)
 			WIN32_EXECUTABLE ON
 			MACOSX_BUNDLE ON
 			)
-		install(TARGETS ${example} COMPONENT examples
-			BUNDLE  DESTINATION . COMPONENT examples
+		install(TARGETS ${example} COMPONENT ${PROJECT_NAME}-examples
+			BUNDLE  DESTINATION . COMPONENT ${PROJECT_NAME}-examples
                         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			)
 		if(QTDEPLOY)
@@ -35,7 +35,7 @@ if(BUILD_EXAMPLES)
 				TARGET ${example}
 				OUTPUT_SCRIPT deploy_script
 				)
-			install(SCRIPT ${deploy_script} COMPONENT examples)
+			install(SCRIPT ${deploy_script} COMPONENT ${PROJECT_NAME}-examples)
 		endif(QTDEPLOY)
 		if(ANDROID)
 			set_property(TARGET ${example} APPEND PROPERTY QT_ANDROID_MIN_SDK_VERSION 30)
@@ -56,7 +56,7 @@ if(BUILD_EXAMPLES)
 		endif(ANDROID)
 		if(EMSCRIPTEN OR ANDROID)
 			target_link_libraries(${example} PRIVATE EstervDesigns::FlatControl Qt6::QuickControls2
-				$<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::FlatControl,TYPE>,STATIC_LIBRARY>:EstervDesigns::FlatControlplugin>
+				$<$<STREQUAL:$<TARGET_PROPERTY:Esterv::FlatControl,TYPE>,STATIC_LIBRARY>:Esterv::FlatControlplugin>
 				)
 			target_compile_definitions(${example} PRIVATE FORCE_STYLE="Esterv.Controls.Flat")
 		endif(EMSCRIPTEN OR ANDROID)

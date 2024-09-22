@@ -1,11 +1,18 @@
 #include <qquickimageprovider.h>
 
+
+#if defined(QTQRGEN_SHARED)
 #include <QtCore/QtGlobal>
-#if defined(WINDOWS_GEN)
-# define GEN_EXPORT Q_DECL_EXPORT
+  #ifdef WINDOWS_EXPORT
+    #define GEN_EXPORT Q_DECL_EXPORT
+  #else
+    #define GEN_EXPORT Q_DECL_IMPORT
+  #endif
 #else
-#define GEN_EXPORT Q_DECL_IMPORT
+  #define GEN_EXPORT
 #endif
+
+namespace Esterv::Utils::QrGen {
 
 class GEN_EXPORT QRImageProvider : public QQuickImageProvider
 {
@@ -22,4 +29,4 @@ private:
 };
 
 
-
+}

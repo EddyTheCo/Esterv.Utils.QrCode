@@ -11,20 +11,24 @@
 #include <QCamera>
 #include <QMediaCaptureSession>
 #include <QVideoSink>
-#include <thread>
 #endif
 
-#include <qrcodedec.hpp>
+#include <esterv/utils/qrcode_dec.hpp>
 
 
+#if defined(QTQRDEC_SHARED)
 #include <QtCore/QtGlobal>
-#if defined(WINDOWS_DEC)
-# define DEC_EXPORT Q_DECL_EXPORT
+  #ifdef WINDOWS_EXPORT
+    #define DEC_EXPORT Q_DECL_EXPORT
+  #else
+    #define DEC_EXPORT Q_DECL_IMPORT
+  #endif
 #else
-#define DEC_EXPORT Q_DECL_IMPORT
+  #define DEC_EXPORT
 #endif
 
-
+namespace Esterv::Utils::QrDec
+{
 class DEC_EXPORT QRImageDecoder : public QObject
 {
     Q_OBJECT
@@ -85,4 +89,4 @@ public:
     static void restart(void);
     static QImage img;
 };
-
+}

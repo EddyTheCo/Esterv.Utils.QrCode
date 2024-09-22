@@ -1,10 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "Qrimagedecoder.hpp"
+#include "esterv/utils/qr_image_decoder.hpp"
 
 #if defined(FORCE_STYLE)
 #include <QQuickStyle>
 #endif
+
+using namespace Esterv::Utils::QrDec;
+
 int main(int argc, char *argv[])
 {
 	QGuiApplication app(argc, argv);
