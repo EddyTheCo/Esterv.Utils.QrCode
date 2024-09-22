@@ -1,4 +1,4 @@
-name: codeFormat
+name: code-format
 run-name: Format code and do PR
 on:
   pull_request_target:
@@ -12,5 +12,5 @@ jobs:
       contents: write
       pull-requests: write
     
-    uses: EddyTheCo/Common/.github/workflows/codeFormat.yml@ndk26
+    uses: EddyTheCo/Common/.github/workflows/code-format.yml@ndk26
         
