@@ -143,11 +143,11 @@
     {
       "name": "default-develop",
       "description": "Release development components",
-      "inherits":"default-release",
       "configurePreset": "default-develop",
-      "variables": {
-	      "CPACK_COMPONENTS_ALL": "EstervQrGen;EstervQrGen-dev;EstervQrDec;EstervQrDec-dev;EstervQtQrGen;EstervQtQrGen-dev;EstervQtQrDec;EstervQtQrDec-dev;EstervQtQrGen-qml;EstervQtQrDec-qml; EstervQrCode-examples"
-      }
+      "generators": [
+        "IFW","TGZ"
+      ],
+      "packageDirectory": "packages"
     }
   ]
 
