@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QtQml/qqmlregistration.h>
+
 #include <qquickimageprovider.h>
 
 #ifndef USE_EMSCRIPTEN
@@ -11,6 +12,8 @@
 #include <QMediaCaptureSession>
 #include <QMediaDevices>
 #include <QVideoSink>
+#include <condition_variable>
+#include <mutex>
 #endif
 
 #include <esterv/utils/qrcode_dec.hpp>
@@ -37,7 +40,15 @@ class DEC_EXPORT QRImageDecoder : public QObject {
 
   QRImageDecoder(QObject *parent = nullptr);
 
-public:
+  public:
+  ~QRImageDecoder() override
+  {
+      {
+          std::lock_guard lk(m_decoding_mutex);
+          m_decode_running = false;
+      }
+      m_decoding_variable.notify_one();
+  }
   static QRImageDecoder *instance();
   static QRImageDecoder *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) {
     return instance();
@@ -56,19 +67,21 @@ signals:
   void useTorchChanged();
 
 private:
-  State m_state;
+    State m_state{Ready};
+    std::mutex m_decoding_mutex;
+    std::condition_variable m_decoding_variable;
+    bool m_decode_running{true};
 #ifndef USE_EMSCRIPTEN
-  QCamera *m_camera;
-  QMediaCaptureSession *captureSession;
-  QVideoSink *videoSink;
-  void getCamera(void);
+    QCamera *m_camera{nullptr};
+    QMediaCaptureSession *captureSession;
+    QVideoSink *videoSink;
+    void getCamera(void);
 #endif
   void setid();
-  void decodePicture(QImage picture);
+  void decodePicture();
   QString m_source;
   QRDecoder detector;
-  bool m_useTorch, m_hasTorch;
-  static QRImageDecoder *m_instance;
+  bool m_useTorch{false}, m_hasTorch{false};
 };
 
 class DEC_EXPORT WasmImageProvider : public QQuickImageProvider {
