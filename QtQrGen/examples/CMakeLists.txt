@@ -73,7 +73,7 @@ if(BUILD_EXAMPLES)
       target_link_libraries(
         ${example}
         PRIVATE
-          EstervDesigns::FlatControl
+          Esterv::FlatControl
           Qt6::QuickControls2
           $<$<STREQUAL:$<TARGET_PROPERTY:Esterv::FlatControl,TYPE>,STATIC_LIBRARY>:Esterv::FlatControlplugin>
       )
