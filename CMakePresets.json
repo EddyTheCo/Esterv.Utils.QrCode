@@ -134,6 +134,7 @@
         "IFW","TGZ"
       ],
       "variables": {
+              "CPACK_ARCHIVE_COMPONENT_INSTALL": "ON",
 	      "CPACK_COMPONENTS_ALL": "EstervQrGen;EstervQtQrGen;EstervQrDec;EstervQtQrDec;EstervQtQrGen-qml;EstervQtQrDec-qml",
 	      "CPACK_PACKAGE_CONTACT":"estervtech@gmail.com",
 	      "CPACK_PACKAGE_VENDOR":"estervtech"
@@ -143,11 +144,16 @@
     {
       "name": "default-develop",
       "description": "Release development components",
-      "inherits":"default-release",
       "configurePreset": "default-develop",
+      "generators": [
+        "IFW","TGZ"
+      ],
       "variables": {
-	      "CPACK_COMPONENTS_ALL": "EstervQrGen;EstervQrGen-dev;EstervQrDec;EstervQrDec-dev;EstervQtQrGen;EstervQtQrGen-dev;EstervQtQrDec;EstervQtQrDec-dev;EstervQtQrGen-qml;EstervQtQrDec-qml; EstervQrCode-examples"
-      }
+	"CPACK_COMPONENTS_GROUPING": "ALL_COMPONENTS_IN_ONE",
+        "CPACK_PACKAGE_CONTACT": "estervtech@gmail.com",
+        "CPACK_PACKAGE_VENDOR": "estervtech"
+      },
+      "packageDirectory": "packages-dev"
     }
   ]
 

@@ -1,4 +1,4 @@
-name: codeFormat
+name: code-format
 run-name: Format code and do PR
 on:
   pull_request_target:
@@ -6,11 +6,9 @@ on:
     branches: [develop]
 jobs:
   checkout-format-pr:
-    runs-on: ubuntu-latest
+    uses: EddyTheCo/Common/.github/workflows/code-format.yml@ndk26
     if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.base_ref, 'develop')) }}
     permissions:
       contents: write
       pull-requests: write
-    
-    uses: EddyTheCo/Common/.github/workflows/codeFormat.yml@ndk26
-        
+

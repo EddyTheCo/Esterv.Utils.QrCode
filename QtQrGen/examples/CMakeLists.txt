@@ -2,15 +2,15 @@ if(BUILD_EXAMPLES)
         include(InstallRequiredSystemLibraries)
 	if(EMSCRIPTEN OR ANDROID)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-		find_package(EstervDesigns 1.2 REQUIRED COMPONENTS EstervFlatControl EstervFlatControl-dev CONFIG )
+		find_package(EstervDesigns 1.2 REQUIRED COMPONENTS FlatControl CONFIG )
 	endif(EMSCRIPTEN OR ANDROID)
 
-        foreach(example "image" "text"
+	foreach(example "Image" "Text"
 			)
 		qt_add_executable(${example} ${example}.cpp )
 
 		qt6_add_qml_module(${example}
-			URI  E${example}
+			URI  Examples${example}
 			VERSION 1.0
 			QML_FILES
 			"qml/${example}.qml"
@@ -29,6 +29,7 @@ if(BUILD_EXAMPLES)
 		install(TARGETS ${example} COMPONENT ${PROJECT_NAME}-examples
 			BUNDLE  DESTINATION . COMPONENT ${PROJECT_NAME}-examples
                         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+			COMPONENT ${PROJECT_NAME}-examples
 			)
 		if(QTDEPLOY)
 			qt_generate_deploy_qml_app_script(

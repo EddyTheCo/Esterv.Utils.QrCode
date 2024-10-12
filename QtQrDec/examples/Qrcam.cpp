@@ -1,11 +1,12 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "esterv/utils/qr_image_provider.hpp"
+#include "esterv/utils/qr_image_decoder.hpp"
+
 #if defined(FORCE_STYLE)
 #include <QQuickStyle>
 #endif
 
-using namespace Esterv::Utils::QrGen;
+using namespace Esterv::Utils::QrDec;
 
 int main(int argc, char *argv[])
 {
@@ -15,11 +16,9 @@ int main(int argc, char *argv[])
 	QQuickStyle::setStyle(FORCE_STYLE);
 #endif
 	QQmlApplicationEngine engine;
+	engine.addImageProvider(QLatin1String("wasm"), new WasmImageProvider());
 	engine.addImportPath("qrc:/esterVtech.com/imports");
-    engine.addImageProvider(QLatin1String("qrcode"), new QRImageProvider(1));
-    const QUrl url=QUrl("qrc:/esterVtech.com/imports/Etext/qml/text.qml");
-
-	engine.load(url);
+engine.loadFromModule("ExamplesQrcam", "Qrcam");
 
 	return app.exec();
 }

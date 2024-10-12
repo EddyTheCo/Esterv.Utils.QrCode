@@ -12,7 +12,7 @@ FetchContent_Declare(
 	EstervQrCode
 	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
 	GIT_TAG vMAJOR.MINOR.PATCH 
-	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS EstervQrGen EstervQrGen-dev  CONFIG  
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QrGen CONFIG
 )
 FetchContent_MakeAvailable(EstervQrCode)
 
