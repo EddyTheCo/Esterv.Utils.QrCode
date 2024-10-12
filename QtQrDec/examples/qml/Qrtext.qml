@@ -6,32 +6,23 @@ import Esterv.CustomControls.QrDec
 import Esterv.CustomControls
 
 ApplicationWindow {
+    id: window
     visible: true
-    id:window
 
-    background:Rectangle
-    {
-        color:Style.backColor1
+    background: Rectangle {
+        color: Style.backColor1
     }
-    ThemeSwitch
-    {
-        id:themeswitch
-        width:45
-        height:width
+    ThemeSwitch {
+        id: themeswitch
+        width: 45
+        height: width
     }
-    QrTextField
-    {
-        anchors.top:themeswitch.bottom
-        anchors.horizontalCenter:parent.horizontalCenter
-        width:300
-        height:60
-        popWidth:Math.max(parent.width*0.5,300)
-        popHeight:Math.max(parent.height*0.5,500)
+    QrTextField {
+        anchors.top: themeswitch.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 300
+        height: 60
+        popWidth: Math.max(parent.width * 0.5, 300)
+        popHeight: Math.max(parent.height * 0.5, 500)
     }
-
-
-
-
-
-
 }

@@ -9,16 +9,16 @@ include(${CMAKE_CURRENT_BINARY_DIR}/local_conf.cmake OPTIONAL)
 
 include(FetchContent)
 FetchContent_Declare(
-	ccommon
-	GIT_REPOSITORY https://github.com/EddyTheCo/Common.git
-	GIT_TAG ndk26
-	)
+  ccommon
+  GIT_REPOSITORY https://github.com/EddyTheCo/Common.git
+  GIT_TAG ndk26)
 FetchContent_MakeAvailable(ccommon)
-version_from_git(
-	LOG       OFF
-	TIMESTAMP "%Y%m%d%H%M%S"
-	)
-project(EstervQrCode VERSION ${VERSION} DESCRIPTION "Library for qr code manipulation" LANGUAGES CXX)
+version_from_git(LOG OFF TIMESTAMP "%Y%m%d%H%M%S")
+project(
+  EstervQrCode
+  VERSION ${VERSION}
+  DESCRIPTION "Library for qr code manipulation"
+  LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -27,31 +27,29 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
 
-
 if(BUILD_QRDEC)
-	add_subdirectory(QrDec)
+  add_subdirectory(QrDec)
 endif(BUILD_QRDEC)
 if(BUILD_QRGEN)
-	add_subdirectory(QrGen)
+  add_subdirectory(QrGen)
 endif(BUILD_QRGEN)
 
 add_subdirectory(QtQrDec)
 add_subdirectory(QtQrGen)
 
-
-  set(SET_COMPONENTS "")
-  foreach(component "QrDec" "QrGen" "QtQrDec" "QtQrGen")
+set(SET_COMPONENTS "")
+foreach(component "QrDec" "QrGen" "QtQrDec" "QtQrGen")
   if(TARGET "${component}")
-	string(APPEND SET_COMPONENTS "set(${PROJECT_NAME}_${component}_FOUND \"ON\")\n")
+    string(APPEND SET_COMPONENTS
+           "set(${PROJECT_NAME}_${component}_FOUND \"ON\")\n")
   endif()
 endforeach()
-
 
 build_exports()
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-	build_cpack()
+  build_cpack()
 endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 if(BUILD_DOCS)
-	build_docs()
+  build_docs()
 endif(BUILD_DOCS)
