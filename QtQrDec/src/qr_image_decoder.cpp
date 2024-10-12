@@ -2,41 +2,34 @@
 #include <QGuiApplication>
 #include <QImage>
 #include <QQuickImageProvider>
-#include <thread>
 
 #ifdef USE_EMSCRIPTEN
 
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-EMSCRIPTEN_BINDINGS(qrdecoder) {
-  emscripten::class_<Esterv::Utils::QrDec::QRImageDecoder>("QRImageDecoder")
-      .function("reload", &Esterv::Utils::QrDec::QRImageDecoder::reload,
-                emscripten::allow_raw_pointers())
-      .class_function("instance",
-                      &Esterv::Utils::QrDec::QRImageDecoder::instance,
-                      emscripten::allow_raw_pointers());
+EMSCRIPTEN_BINDINGS(qrdecoder)
+{
+    emscripten::class_<Esterv::Utils::QrDec::QRImageDecoder>("QRImageDecoder")
+        .function("reload",
+                  &Esterv::Utils::QrDec::QRImageDecoder::reload,
+                  emscripten::allow_raw_pointers())
+        .class_function("instance",
+                        &Esterv::Utils::QrDec::QRImageDecoder::instance,
+                        emscripten::allow_raw_pointers());
 }
-
+// clang-format off
 EM_JS(void, js_start, (), {
-  if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-    stream =
-        navigator.mediaDevices
-            .getUserMedia({video : {facingMode : 'environment'}, audio : false})
-            .then(
-                (stream) =
-                    >
-                    {
+    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        stream = navigator.mediaDevices.getUserMedia({video : {facingMode : 'environment'}, audio : false}).then((stream) => {
                       const settings = stream.getVideoTracks()[0].getSettings();
                       const width = settings.width;
                       const height = settings.height;
 
-                      if (document.querySelector("#qrvideo") == = null) {
+                      if (document.querySelector("#qrvideo") === null) {
                         let elemDiv = document.createElement('div');
-                        elemDiv.style.cssText =
-                            'display:none; position:absolute;width:100%;height:100%;';
-                        elemDiv.innerHTML +=
-                            '<video controls autoplay id="qrvideo" width="' +
+                        elemDiv.style.cssText = 'display:none; position:absolute;width:100%;height:100%;';
+                        elemDiv.innerHTML += '<video controls autoplay id="qrvideo" width="' +
                             width + 'px" height="' + height +
                             'px"></video><canvas id="qrcanvas" width="' +
                             width + 'px" height="' + height +
@@ -48,16 +41,14 @@ EM_JS(void, js_start, (), {
                       window.localStream = stream;
 
                       let canvas = document.querySelector("#qrcanvas");
-                      let ctx = canvas.getContext("2d");
+                      let ctx = canvas.getContext("2d", { willReadFrequently: true });
                       const processFrame = function() {
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        const imageData =
-                            ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                         const sourceBuffer = imageData.data;
                         const buffer = _malloc(sourceBuffer.byteLength);
                         HEAPU8.set(sourceBuffer, buffer);
-                        Module.QRImageDecoder.instance().reload(
-                            buffer, video.width, video.height);
+                        Module.QRImageDecoder.instance().reload(buffer, video.width, video.height);
                         _free(buffer);
                         if (window.localStream.active) {
                           requestAnimationFrame(processFrame);
@@ -68,20 +59,22 @@ EM_JS(void, js_start, (), {
                       processFrame();
                     })
             .catch(alert);
-  }
+    }
 });
 
 EM_JS(void, js_stop, (), {
-  if (window.localStream)
-    window.localStream.getVideoTracks()[0].stop();
+    if (window.localStream)
+        window.localStream.getVideoTracks()[0].stop();
 });
+// clang-format on
+namespace Esterv::Utils::QrDec {
 #else
+#include <thread>
 #if QT_CONFIG(permissions)
 #include <QPermission>
 #endif
 
 namespace Esterv::Utils::QrDec {
-QRImageDecoder *QRImageDecoder::m_instance = nullptr;
 
 void QRImageDecoder::getCamera(void) {
   const QList<QCameraDevice> cameras = QMediaDevices::videoInputs();
@@ -98,39 +91,49 @@ void QRImageDecoder::getCamera(void) {
 }
 
 #endif
-QRImageDecoder *QRImageDecoder::instance() {
-  if (!m_instance)
-    m_instance = new QRImageDecoder();
-  return m_instance;
+QRImageDecoder *QRImageDecoder::instance()
+{
+    static QRImageDecoder *instance = new QRImageDecoder();
+    return instance;
 }
 QRImageDecoder::QRImageDecoder(QObject *parent)
-    : QObject(parent), m_useTorch(false), m_hasTorch(false),
+    : QObject(parent)
+
 #ifndef USE_EMSCRIPTEN
-      m_camera(nullptr), captureSession(new QMediaCaptureSession(this)),
-      videoSink(new QVideoSink(this)),
+    , captureSession{new QMediaCaptureSession(this)}
+    , videoSink{new QVideoSink(this)}
 #endif
-      m_state(Ready) {
+{
 #ifndef USE_EMSCRIPTEN
-  captureSession->setVideoOutput(videoSink);
-  QObject::connect(videoSink, &QVideoSink::videoFrameChanged, this,
-                   [=](const QVideoFrame &Vframe) {
-                     if (m_camera && m_camera->isActive() && Vframe.isValid()) {
-                       auto picture = Vframe.toImage();
-                       WasmImageProvider::img = picture;
-                       setid();
-                       if (m_state) {
-                         auto var = std::thread(&QRImageDecoder::decodePicture,
-                                                this, picture);
-                         var.detach();
-                       }
-                     }
-                   });
-  connect(this, &QRImageDecoder::useTorchChanged, this, [=]() {
-    if (m_camera->isActive() && m_useTorch)
-      m_camera->setTorchMode(QCamera::TorchOn);
-    else
-      m_camera->setTorchMode(QCamera::TorchOff);
-  });
+    std::thread decoding_thread([this]() {
+        std::unique_lock lk(m_decoding_mutex);
+        while (m_decode_running) {
+            m_decoding_variable.wait(lk);
+            decodePicture();
+        }
+    });
+    decoding_thread.detach();
+    captureSession->setVideoOutput(videoSink);
+    QObject::connect(videoSink, &QVideoSink::videoFrameChanged, this, [=](const QVideoFrame &Vframe) {
+        if (m_camera && m_camera->isActive() && Vframe.isValid()) {
+            auto picture = Vframe.toImage();
+            WasmImageProvider::img = picture;
+            setid();
+            if (m_state == Ready) {
+                {
+                    std::lock_guard lk(m_decoding_mutex);
+                    m_state = Decoding;
+                }
+                m_decoding_variable.notify_one();
+            }
+        }
+    });
+    connect(this, &QRImageDecoder::useTorchChanged, this, [=]() {
+        if (m_camera->isActive() && m_useTorch)
+            m_camera->setTorchMode(QCamera::TorchOn);
+        else
+            m_camera->setTorchMode(QCamera::TorchOff);
+    });
 #endif
 };
 void QRImageDecoder::stop() {
@@ -182,16 +185,18 @@ void QRImageDecoder::start() {
 #endif
 }
 
-void QRImageDecoder::decodePicture(QImage picture) {
-  m_state = QRImageDecoder::Decoding;
-  picture.convertTo(QImage::Format_Grayscale8);
-  const auto str = detector.decode_grey(picture.bits(), picture.height(),
-                                        picture.bytesPerLine());
-  const auto qstr = QString::fromStdString(str);
-  if (qstr != "") {
-    emit decodedQR(qstr);
-  }
-  m_state = QRImageDecoder::Ready;
+void QRImageDecoder::decodePicture()
+{
+        QImage picture = WasmImageProvider::img;
+        picture.convertTo(QImage::Format_Grayscale8);
+        const auto str = detector.decode_grey(picture.bits(),
+                                              picture.height(),
+                                              picture.bytesPerLine());
+        const auto qstr = QString::fromStdString(str);
+        if (qstr != "") {
+            emit decodedQR(qstr);
+        }
+        m_state = QRImageDecoder::Ready;
 }
 
 QImage WasmImageProvider::img = QImage();
@@ -212,8 +217,10 @@ void QRImageDecoder::reload(int offset, int width, int height) {
   WasmImageProvider::img =
       QImage(imgarr, width, height, QImage::Format_RGBA8888);
   setid();
-  if (m_state)
-    decodePicture(WasmImageProvider::img);
+  if (m_state == Ready) {
+      m_state = Decoding;
+      decodePicture();
+  }
 }
 void QRImageDecoder::setid() {
   static quint8 index = 0;
