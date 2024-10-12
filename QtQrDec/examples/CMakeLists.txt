@@ -2,15 +2,15 @@ if(BUILD_EXAMPLES)
         include(InstallRequiredSystemLibraries)
 	if(EMSCRIPTEN OR ANDROID)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-		find_package(EstervDesigns 1.2 REQUIRED COMPONENTS EstervFlatControl CONFIG )
+		find_package(EstervDesigns 2.0 REQUIRED COMPONENTS FlatControl CONFIG )
 	endif(EMSCRIPTEN OR ANDROID)
 
-        foreach(example "qrcam" "qrtext"
+        foreach(example "Qrcam" "Qrtext"
 			)
 		qt_add_executable(${example} ${example}.cpp )
 
 		qt6_add_qml_module(${example}
-			URI  E${example}
+			URI  Examples${example}
 			VERSION 1.0
 			QML_FILES
 			"qml/${example}.qml"

@@ -18,10 +18,8 @@ int main(int argc, char *argv[])
 	QQmlApplicationEngine engine;
 	engine.addImageProvider(QLatin1String("wasm"), new WasmImageProvider());
 	engine.addImportPath("qrc:/esterVtech.com/imports");
-    const QUrl url=QUrl("qrc:/esterVtech.com/imports/Eqrtext/qml/qrtext.qml");
 
-	engine.load(url);
-
+engine.loadFromModule("ExamplesQrtext", "Qrtext");
 	return app.exec();
 }
 

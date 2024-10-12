@@ -18,10 +18,8 @@ int main(int argc, char *argv[])
 	QQmlApplicationEngine engine;
 	engine.addImportPath("qrc:/esterVtech.com/imports");
     engine.addImageProvider(QLatin1String("qrcode"), new QRImageProvider(1));
-    const QUrl url=QUrl("qrc:/esterVtech.com/imports/Eimage/qml/image.qml");
 
-	engine.load(url);
-
+engine.loadFromModule("ExamplesImage", "Image");
 	return app.exec();
 }
 
