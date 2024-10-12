@@ -15,12 +15,12 @@ Component.onCompleted:
 {
 Style.frontColor1= (Style.theme)?LightThemeColor:DarkThemeColor //Like control.palette.text
 
-Style.frontColor2= ... 
-Style.frontColor3= ... 
+Style.frontColor2= ...
+Style.frontColor3= ...
 
-Style.backColor1= ... 
-Style.backColor2= ... 
-Style.backColor3= ... 
+Style.backColor1= ...
+Style.backColor2= ...
+Style.backColor3= ...
 }
 
 ``` 
@@ -33,15 +33,15 @@ If compiling for wasm the library creates a custom ImageProvider that communicat
 You can play with the decoder on [this page](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_dec)
  
 
-## Adding the module to your CMake project 
+## Adding the module to your CMake project
 
 ```
 include(FetchContent)
 FetchContent_Declare(
 	EstervQrCode
 	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
-	GIT_TAG vMAJOR.MINOR.PATCH 
-	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS EstervQtQrDec EstervQtQrDec-dev EstervQtQrDec-qml CONFIG  
+	GIT_TAG vMAJOR.MINOR.PATCH
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QtQrDec CONFIG
 )
 FetchContent_MakeAvailable(EstervQrCode)
 
