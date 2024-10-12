@@ -40,14 +40,13 @@ class DEC_EXPORT QRImageDecoder : public QObject {
 
   QRImageDecoder(QObject *parent = nullptr);
 
-  public:
-  ~QRImageDecoder() override
-  {
-      {
-          std::lock_guard lk(m_decoding_mutex);
-          m_decode_running = false;
-      }
-      m_decoding_variable.notify_one();
+public:
+  ~QRImageDecoder() override {
+    {
+      std::lock_guard lk(m_decoding_mutex);
+      m_decode_running = false;
+    }
+    m_decoding_variable.notify_one();
   }
   static QRImageDecoder *instance();
   static QRImageDecoder *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) {
@@ -67,15 +66,15 @@ signals:
   void useTorchChanged();
 
 private:
-    State m_state{Ready};
-    std::mutex m_decoding_mutex;
-    std::condition_variable m_decoding_variable;
-    bool m_decode_running{true};
+  State m_state{Ready};
+  std::mutex m_decoding_mutex;
+  std::condition_variable m_decoding_variable;
+  bool m_decode_running{true};
 #ifndef USE_EMSCRIPTEN
-    QCamera *m_camera{nullptr};
-    QMediaCaptureSession *captureSession;
-    QVideoSink *videoSink;
-    void getCamera(void);
+  QCamera *m_camera{nullptr};
+  QMediaCaptureSession *captureSession;
+  QVideoSink *videoSink;
+  void getCamera(void);
 #endif
   void setid();
   void decodePicture();
