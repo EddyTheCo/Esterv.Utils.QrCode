@@ -63,7 +63,7 @@ if(Qt6_FOUND AND TARGET QrDec)
   target_include_directories(
     QtQrDec PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/esterv/utils)
   if(EMSCRIPTEN)
-    target_compile_definitions(QtQrDec PRIVATE USE_EMSCRIPTEN)
+    target_compile_definitions(QtQrDec PUBLIC USE_EMSCRIPTEN)
   else()
     target_link_libraries(QtQrDec PUBLIC Qt6::Multimedia)
   endif(EMSCRIPTEN)
