@@ -8,7 +8,7 @@ if(Qt6_FOUND AND TARGET QrDec)
   FetchContent_Declare(
     EstervDesigns
     GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Designs.git
-    GIT_TAG develop
+    GIT_TAG v2.0.0
     FIND_PACKAGE_ARGS 2 COMPONENTS SimpleStyle CustomControls CONFIG)
   FetchContent_MakeAvailable(EstervDesigns)
   qt_standard_project_setup()
@@ -82,7 +82,9 @@ if(Qt6_FOUND AND TARGET QrDec)
   install(
     TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
     EXPORT ${PROJECT_NAME}-config
-    COMPONENT EstervQtQrDec)
+    COMPONENT EstervQtQrDec
+    ARCHIVE COMPONENT ${PROJECT_NAME}-dev
+    )
   install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
