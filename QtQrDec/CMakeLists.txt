@@ -8,7 +8,7 @@ if(Qt6_FOUND AND TARGET QrDec)
   FetchContent_Declare(
     EstervDesigns
     GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Designs.git
-    GIT_TAG develop
+    GIT_TAG v2.0.0
     FIND_PACKAGE_ARGS 2 COMPONENTS SimpleStyle CustomControls CONFIG)
   FetchContent_MakeAvailable(EstervDesigns)
   qt_standard_project_setup()
