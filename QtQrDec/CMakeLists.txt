@@ -83,8 +83,7 @@ if(Qt6_FOUND AND TARGET QrDec)
     TARGETS QtQrDec ${out_targets_var} ${out_targets_var2}
     EXPORT ${PROJECT_NAME}-config
     COMPONENT EstervQtQrDec
-    ARCHIVE COMPONENT ${PROJECT_NAME}-dev
-    )
+    ARCHIVE COMPONENT ${PROJECT_NAME}-dev)
   install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
