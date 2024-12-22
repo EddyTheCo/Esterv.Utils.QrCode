@@ -1,4 +1,4 @@
-# qrCode
+# Esterv.Utils.QrCode 
 
 [TOC]
 
@@ -8,19 +8,25 @@ The GUI part will be based on Qt libraries and QML. Examples of this library com
 - [QtQrGen](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_gen)
 - [QtQrDec](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_dec)
 
-## Adding the libraries to your CMake project 
+## Configure, build, test, package ...
+
+The project uses [CMake presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) as a way to share CMake configurations.
+Refer to [cmake](https://cmake.org/cmake/help/latest/manual/cmake.1.html), [ctest](https://cmake.org/cmake/help/latest/manual/ctest.1.html) and [cpack](https://cmake.org/cmake/help/latest/manual/cpack.1.html) documentation for more information on the use of presets.
+
+
+## Adding the libraries to your CMake project
 
 ```CMake
 include(FetchContent)
 FetchContent_Declare(
-	qrCode
-	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	EstervQrCode
+	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
 	GIT_TAG vMAJOR.MINOR.PATCH 
-	FIND_PACKAGE_ARGS MAJOR.MINOR CONFIG  
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QrDec QrGen QtQrDec QtQrGen CONFIG
 	)
-FetchContent_MakeAvailable(qrCode)
+FetchContent_MakeAvailable(EstervQrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QrGen qrCode::QtQrGen qrCode::QrDec qrCode::QtQrDec)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> Esterv::QrGen Esterv::QtQrGen Esterv::QrDec Esterv::QtQrDec)
 ```
 For more information check
 
@@ -31,10 +37,9 @@ For more information check
 
 ## API reference
 
-You can read the [API reference](https://eddytheco.github.io/qrCode/) here, or generate it yourself like
+You can read the [API reference](https://eddytheco.github.io/Esterv.Utils.QrCode/), or generate it yourself like
 ```
-cmake -DBUILD_DOCS=ON ../
-cmake --build . --target doxygen_docs
+cmake --workflow --preset default-documentation
 ```
 
 ## Contributing

@@ -1,57 +1,49 @@
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Esterv.Styles.Simple
 import Esterv.CustomControls.QrDec
 import Esterv.CustomControls
-ApplicationWindow {
-    visible: true
-    id:window
 
-    background:Rectangle
-    {
-        color:Style.backColor1
+ApplicationWindow {
+    id: window
+    visible: true
+
+    background: Rectangle {
+        color: Style.backColor1
     }
-    ColumnLayout
-    {
+    ColumnLayout {
         anchors.fill: parent
-        RowLayout
-        {
-            id:rowlayout
+        RowLayout {
+            id: rowlayout
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.minimumHeight: 70
             Layout.minimumWidth: 300
-            ThemeSwitch
-            {
-                id:themeswitch
+            ThemeSwitch {
+                id: themeswitch
             }
-            Label
-            {
-                id:label
+            Label {
+                id: label
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignBottom
                 text: ""
-                elide:Text.ElideRight
-                color:Style.frontColor2
+                elide: Text.ElideRight
+                color: Style.frontColor2
             }
 
-            Switch
-            {
-                id:onoff
+            Switch {
+                id: onoff
 
-                onCheckedChanged:
-                {
-                    (onoff.checked)?QRImageDecoder.start():QRImageDecoder.stop();
+                onCheckedChanged: {
+                    (onoff.checked) ? QRImageDecoder.start() : QRImageDecoder.stop();
                 }
             }
         }
 
-        QrCam
-        {
+        QrCam {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.margins: 20
@@ -59,14 +51,8 @@ ApplicationWindow {
         Connections {
             target: QRImageDecoder
             function onDecodedQR(data) {
-                label.text=data;
+                label.text = data;
             }
         }
     }
-
-
-
-
-
-
 }

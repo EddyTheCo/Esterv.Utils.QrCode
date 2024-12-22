@@ -1,4 +1,4 @@
-# QtQrGen
+# Esterv.CustomControls.QrGen
 
 [TOC]
 
@@ -7,8 +7,9 @@ The custom types are related to the generation and showing of QRCODEs.
 
 
 The types should be style independent, but the colors used relies on the [EstervDesigns](https://github.com/EddyTheCo/MyDesigns)
-Simple style. 
+Simple style.
 If you want to change the colors in your top qml file one can do
+
 ```
 import Esterv.Styles.Simple
 ...
@@ -17,12 +18,12 @@ Component.onCompleted:
 {
 Style.frontColor1= (Style.theme)?LightThemeColor:DarkThemeColor//Like control.palette.text
 
-Style.frontColor2= ... 
-Style.frontColor3= ... 
+Style.frontColor2= ...
+Style.frontColor3= ...
 
-Style.backColor1= ... 
-Style.backColor2= ... 
-Style.backColor3= ... 
+Style.backColor1= ...
+Style.backColor2= ...
+Style.backColor3= ...
 }
 
 ``` 
@@ -30,19 +31,22 @@ Style.backColor3= ...
 You can play with the  ImageProvider on [this page](https://eddytheco.github.io/qmlonline/?example_url=qt_qr_gen).
 
 
-## Adding the module to your CMake project 
+## Adding the module to your CMake project
+
 ```
 include(FetchContent)
 FetchContent_Declare(
-	qrCode
-	GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+	EstervQrCode
+	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Utils.QrCode.git
 	GIT_TAG vMAJOR.MINOR.PATCH 
-	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QtQrGen CONFIG  
+	FIND_PACKAGE_ARGS MAJOR.MINOR COMPONENTS QtQrGen CONFIG
 )
-FetchContent_MakeAvailable(qrCode)
+FetchContent_MakeAvailable(EstervQrCode)
 
-target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> qrCode::QtQrGen)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> Esterv::QtQrGen)
+target_link_libraries(<target> <PRIVATE|PUBLIC|INTERFACE> $<$<STREQUAL:$<TARGET_PROPERTY:Esterv::QtQrGen,TYPE>,STATIC_LIBRARY>:Esterv::QtQrGenplugin>)
 ```
+
 ## Examples
 
 The [examples](examples) folder shows the use of the different custom types provided by the QML module.

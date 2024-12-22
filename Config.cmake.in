@@ -1,6 +1,8 @@
 @PACKAGE_INIT@
+@SET_COMPONENTS@
 include(CMakeFindDependencyMacro)
-find_dependency(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Svg OPTIONAL_COMPONENTS Multimedia )
+find_dependency(Qt6 COMPONENTS Core Gui Qml Quick Svg OPTIONAL_COMPONENTS Multimedia )
 find_dependency(OpenCV COMPONENTS core objdetect imgproc flann features2d calib3d )
-find_dependency(EstervDesigns 1.2 COMPONENTS SimpleStyle CustomControls CONFIG)
-include ( "${CMAKE_CURRENT_LIST_DIR}/qrCode-config.cmake" )
+find_dependency(EstervDesigns 2 COMPONENTS SimpleStyle CustomControls CONFIG)
+find_package_handle_standard_args(@PROJECT_NAME@ HANDLE_COMPONENTS)
+include ( "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@-config.cmake" )

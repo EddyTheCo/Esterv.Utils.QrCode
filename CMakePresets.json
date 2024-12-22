@@ -1,0 +1,161 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "default-release",
+      "displayName": "Default Release",
+      "description": "Release Static library using Ninja generator",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "REPO_URL": "https://eddytheco.github.io/Esterv.Utils.QrCode"
+      }
+    },
+    {
+      "name": "default-develop",
+      "displayName": "Default Config for development(Release)",
+      "description": "Release build type using Ninja generator, add tests and docs",
+      "inherits": "default-release",
+      "cacheVariables": {
+        "BUILD_DOCS": "ON",
+        "BUILD_EXAMPLES": "ON",
+        "QTDEPLOY": "ON"
+      }
+    },
+    {
+      "name": "default-develop-debug",
+      "displayName": "Default Config for development(Debug)",
+      "description": "Debug build type using Ninja generator",
+      "inherits": "default-develop",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default-release",
+      "configurePreset": "default-release"
+    },
+    {
+      "name": "default-develop",
+      "configurePreset": "default-develop"
+    },
+    {
+      "name": "default-develop-debug",
+      "configurePreset": "default-develop-debug"
+    },
+    {
+      "name": "default-documentation",
+      "configurePreset": "default-develop",
+      "targets": "doxygen_docs"
+    },
+    {
+      "name": "default-qmllint",
+      "configurePreset": "default-develop",
+      "targets": "all_qmllint_json"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "default-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default-release"
+        },
+        {
+          "type": "build",
+          "name": "default-release"
+        }
+      ]
+    },
+    {
+      "name": "default-develop",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default-develop"
+        },
+        {
+          "type": "build",
+          "name": "default-develop"
+        }
+      ]
+    },
+    {
+      "name": "default-documentation",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default-develop"
+        },
+        {
+          "type": "build",
+          "name": "default-documentation"
+        }
+      ]
+    },
+    {
+      "name": "default-qmllint",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default-develop"
+        },
+        {
+          "type": "build",
+          "name": "default-qmllint"
+        }
+      ]
+    },
+    {
+      "name": "default-develop-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default-develop-debug"
+        },
+        {
+          "type": "build",
+          "name": "default-develop-debug"
+        }
+      ]
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "default-release",
+      "description": "Release runtime components",
+      "configurePreset": "default-release",
+      "generators": [
+        "IFW",
+        "TGZ"
+      ],
+      "variables": {
+        "CPACK_ARCHIVE_COMPONENT_INSTALL": "ON",
+        "CPACK_COMPONENTS_ALL": "EstervQrGen;EstervQtQrGen;EstervQrDec;EstervQtQrDec;EstervQtQrGen-qml;EstervQtQrDec-qml",
+        "CPACK_PACKAGE_CONTACT": "estervtech@gmail.com",
+        "CPACK_PACKAGE_VENDOR": "estervtech"
+      },
+      "packageDirectory": "packages"
+    },
+    {
+      "name": "default-develop",
+      "description": "Release development components",
+      "configurePreset": "default-develop",
+      "generators": [
+        "IFW",
+        "TGZ"
+      ],
+      "variables": {
+        "CPACK_COMPONENTS_GROUPING": "ALL_COMPONENTS_IN_ONE",
+        "CPACK_PACKAGE_CONTACT": "estervtech@gmail.com",
+        "CPACK_PACKAGE_VENDOR": "estervtech"
+      },
+      "packageDirectory": "packages-dev"
+    }
+  ]
+}

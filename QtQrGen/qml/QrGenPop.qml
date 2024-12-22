@@ -6,71 +6,57 @@ import Esterv.Styles.Simple
 
 Popup {
     id: control
-    required property string textData;
-    property bool showClose:false;
+    required property string textData
+    property bool showClose: false
 
-    ColumnLayout
-    {
-        anchors.fill:parent
-        Item
-        {
+    ColumnLayout {
+        anchors.fill: parent
+        Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.minimumHeight: 50
             Layout.maximumHeight: 100
-            Switch
-            {
-                id:showdata
+            Switch {
+                id: showdata
                 text: qsTr("Show text")
             }
-            CloseButton
-            {
-                id:cbutton
+            CloseButton {
+                id: cbutton
                 anchors.top: parent.top
-                radius:width
+                radius: width
                 anchors.right: parent.right
                 visible: control.showClose
 
-                flat:true
-                onClicked:
-                {
-                    control.visible=false;
+                flat: true
+                onClicked: {
+                    control.visible = false;
                 }
             }
         }
-        Item
-        {
+        Item {
             Layout.minimumHeight: 100
             Layout.minimumWidth: 200
             Layout.fillWidth: true
             Layout.fillHeight: true
             ScrollView {
-                anchors.fill:parent
-                TextArea
-                {
-                    id:tex
+                anchors.fill: parent
+                TextArea {
+                    id: tex
                     text: control.textData
                     readOnly: true
                     wrapMode: Text.Wrap
-
                 }
             }
-            visible:showdata.checked
+            visible: showdata.checked
         }
 
-        QrGenImage
-        {
-            id:qrgenimage
-            textData:control.textData
-            visible:!tex.visible
+        QrGenImage {
+            id: qrgenimage
+            textData: control.textData
+            visible: !tex.visible
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.margins: 0
         }
-
     }
-
-
-
 }
-
